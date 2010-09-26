@@ -4,8 +4,12 @@ module Plant
     def self.stubs_find klass
       class << klass
         def find *args
-          return Plant::Stubber.find_all(self.name.constantize) if args && args.first == :all
-          return Plant::Stubber.find(self.name.constantize)
+          case args.first
+            when :first then Plant::Stubber.find_all(self.name.constantize).first
+            when :last  then Plant::Stubber.find_all(self.name.constantize).last
+            when :all   then Plant::Stubber.find_all(self.name.constantize)
+            else Plant::Stubber.find(self.name.constantize)
+          end
         end
       end
     end

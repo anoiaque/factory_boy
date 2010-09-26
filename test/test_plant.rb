@@ -51,6 +51,16 @@ class PlantTest < Test::Unit::TestCase
       users = User.find(:all)
       assert_equal [], users
     end
+    
+    def test_stubs_find_with_option_first
+      users = 3.times.map { Plant(:user) }
+      assert_equal users.first, User.find(:first)       
+    end
+    
+    def test_stubs_find_with_option_last
+      users = 3.times.map { Plant(:user) }
+      assert_equal users.last, User.find(:last)       
+    end
  
     
 end
