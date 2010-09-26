@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'active_support/inflector'
 require 'stubber'
+require 'setup'
 
 module Plant
 
@@ -43,12 +44,16 @@ module Plant
   def self.destroy
     @@pool = {}
   end
- 
+
 end
 
 def Plant symbol
   klass = symbol.to_s.camelize.constantize
   definition = Plant.plants[klass]
-  Plant.pool klass, definition
+  Plant.pool(klass, definition)
   definition
 end
+
+
+
+

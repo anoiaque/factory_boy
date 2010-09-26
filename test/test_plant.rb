@@ -1,12 +1,12 @@
 require 'help_test'
+require 'mocha'
 
 class PlantTest < Test::Unit::TestCase
 
     def setup
-      Plant.destroy
-      Plant.reload
+      Plant(:customer)
     end
-
+    
     def test_define_simple_definition
       assert customer = Plant(:customer)
       assert_nil customer.name
@@ -61,6 +61,10 @@ class PlantTest < Test::Unit::TestCase
       users = 3.times.map { Plant(:user) }
       assert_equal users.last, User.find(:last)       
     end
- 
+    
+    def test_mocha_is_not_overidden_with_plant_setup
+      Plant.expects(:pool).once
+      Plant(:user)
+    end
     
 end

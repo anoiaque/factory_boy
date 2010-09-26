@@ -1,3 +1,4 @@
 That's a convenient way for stubbing create/find
 Don't stub find with sql conditions ()
 Don't work if find(ids) in method under test
+Not tested with rails 3
