@@ -30,32 +30,27 @@ class PlantTest < Test::Unit::TestCase
     
     def test_define_with_association_has_one
       user = Plant(:user)
-      user = User.find 
       profile = Profile.find
       assert_equal profile, user.profile
     end
-    # 
-    # def test_define_with_association_has_many
-    #   adress = factory_default_adress
-    #   user = Plant.define :user do |user|
-    #      user.name  = "Zorro"
-    #      user.age = 800
-    #      user.adresses = [adress]
-    #    end
-    #   user = User.find 
-    #   assert_equal adress, user.adresses.first
-    # end
-    # 
-    # def test_stubs_find_with_option_all
-    #   user = factory_default_user
-    #   users = User.find(:all)
-    #   assert_equal [user], users
-    # end
-    # 
-    # def test_find_all_must_return_an_empty_array_if_no_object
-    #   users = User.find(:all)
-    #   assert_equal [], users
-    # end
+    
+    def test_define_with_association_has_many
+      user = Plant(:user)
+      assert adresses = user.adresses
+      adress = Adress.find
+      assert_equal adress, user.adresses.first
+    end
+    
+    def test_stubs_find_with_option_all
+      user =  Plant(:user)
+      users = User.find(:all)
+      assert_equal [user], users
+    end
+    
+    def test_find_all_must_return_an_empty_array_if_no_object
+      users = User.find(:all)
+      assert_equal [], users
+    end
  
     
 end
