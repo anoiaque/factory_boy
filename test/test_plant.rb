@@ -1,5 +1,4 @@
 require 'help_test'
-require 'mocha'
 
 class PlantTest < Test::Unit::TestCase
 
