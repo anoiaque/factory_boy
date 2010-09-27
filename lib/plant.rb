@@ -7,12 +7,15 @@ module Plant
 
   @@plants = {}
   @@pool = {}
+  @@map = {}
+  @@sequences = {}
   
-  def self.define symbol
-    klass = symbol.to_s.camelize.constantize
+  def self.define symbol, args={}
+    klass = args[:class] || symbol.to_s.camelize.constantize
     instance = klass.new
     yield instance if block_given?
     add_plant(klass, instance)
+    add_plant(symbol, instance) if args[:class]
     Plant::Stubber.stubs_find(klass)
   end
   
@@ -37,21 +40,26 @@ module Plant
     @@pool[klass] << instance
   end
   
-  def self.association symbol
-    Plant(symbol)
-  end
-  
   def self.destroy
     @@pool = {}
+  end
+  
+  def self.sequence symbol, &proc
+    @@sequences[symbol] = {:lambda => proc, :index => 0}
+  end
+  
+  def self.next symbol
+    @@sequences[symbol][:lambda].call(@@sequences[symbol][:index] += 1)
   end
 
 end
 
-def Plant symbol
-  klass = symbol.to_s.camelize.constantize
-  definition = Plant.plants[klass]
-  Plant.pool(klass, definition)
-  definition
+def Plant symbol, args={}
+  plants = Plant.plants
+  instance = plants[symbol] || plants[symbol.to_s.camelize.constantize]
+  args.each {|key, value| instance.send(key.to_s + '=', value)}
+  Plant.pool(instance.class, instance)
+  instance
 end
 
 

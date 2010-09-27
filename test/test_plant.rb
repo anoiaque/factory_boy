@@ -67,4 +67,38 @@ class PlantTest < Test::Unit::TestCase
       Plant(:user)
     end
     
+    def test_create_plant_with_hash_for_values
+      adress = Plant(:adress)
+      user = Plant(:user, :name => "Marie", :adresses => [adress])
+      assert_equal "Marie", user.name
+      assert_equal adress, user.adresses.first
+    end
+    
+    def test_define_with_class_option
+      Plant.define :marie, :class => User do |peter|
+        peter.name = "Marie"
+        peter.adresses = [Adress.new(:street => "Rue de Brest")]
+      end
+      marie = Plant(:marie)
+      assert_equal "Marie", marie.name
+      assert_equal "Rue de Brest", marie.adresses.first.street
+    end
+    
+    def test_plants_are_reloaded_and_4_plants_are_defined
+      assert_equal 5, Plant.plants.size
+    end
+    
+    def test_define_with_dependent_attribute
+      Plant.define :user do |user|
+        user.name = "Marie"
+        user.adresses = [Adress.new(:street => "Rue de #{user.name}")]
+      end
+      assert_equal "Rue de Marie", Plant(:user).adresses.first.street
+    end
+    
+    def test_plant_sequences
+      assert_equal "incognito1@kantena.com", Plant.next(:email)
+      assert_equal "incognito2@kantena.com", Plant.next(:email)
+    end
+    
 end

@@ -1,3 +1,7 @@
+Plant.sequence :email do |n|
+  "incognito#{n}@kantena.com"
+end
+
 Plant.define :profile do |profile|
   profile.password = "BREIZH!"
 end
@@ -10,7 +14,7 @@ end
 Plant.define :user do |user|
   user.name  = "Zorro"
   user.age = 800
-  user.profile = Plant.association(:profile)
+  user.profile = Plant(:profile)
   user.adresses = [Plant(:adress)]
 end
 

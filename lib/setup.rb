@@ -10,7 +10,20 @@ module Test
         Plant.reload
         original_run(result,&block)
       end
- 
+    end
+  end
+end
+
+if defined?(ActiveSupport::TestCase)
+  module ActiveSupport
+    class TestCase
+      alias_method :original_run, :run
+    
+      def run(result,&block)
+        Plant.destroy
+        Plant.reload
+        original_run(result,&block)
+      end
     end
   end
 end
