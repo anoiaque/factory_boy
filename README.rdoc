@@ -25,12 +25,14 @@ Get it with : user = Plant(:user)
 
 Example of tests :
 
+
 def test___1
-   user = Plant(:user)
-   assert_equal user, User.find #OK
-   assert_equal user, User.find(:first) #OK
-   assert_equal user, User.find(:last) #OK
+user = Plant(:user)
+assert_equal user, User.find #OK
+assert_equal user, User.find(:first) #OK
+assert_equal user, User.find(:last) #OK
 end
+
 
 def test___2
   2.times { Plant(:user) }
@@ -101,3 +103,4 @@ Not tested with rails 3
 == New features ?
 
 Stubs find with sql conditions ? That means transform :conditions in object.select ... We think of it !
+Report Bugs here , on github
