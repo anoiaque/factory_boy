@@ -25,14 +25,13 @@ Get it with : user = Plant(:user)
 
 Example of tests :
 
-<pre>
+
 def test___1
   user = Plant(:user)
   assert_equal user, User.find #OK
   assert_equal user, User.find(:first) #OK
   assert_equal user, User.find(:last) #OK
-  end
-</pre>
+end
 
 
 def test___2
