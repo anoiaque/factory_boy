@@ -13,7 +13,7 @@ You can see also unit tests / code  for deeper comprehension.
 
 Define your Plants (=~ Factories if factory_girl) in test/plants.rb
 
-*Example :
+<b>Example :</b>
 
 Plant.define :user do |user|
   user.name  = "Bart"
