@@ -53,7 +53,7 @@ Get it with : user = Plant(:user)
 
 == Associations 
 
-Assign fixtures to association in definition of plant :
+Assign fixures to association in definition of plant :
 
   Plant.define :profile do |profile|
     profile.password = "BREIZH!"
