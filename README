@@ -13,7 +13,7 @@ You can see also unit tests / code  for deeper comprehension.
 
 Define your Plants (=~ Factories if factory_girl) in test/plants.rb
 
-<b>Example :</b>
+Example :
 
 Plant.define :user do |user|
   user.name  = "Bart"
@@ -23,7 +23,7 @@ end
 Get it with : user = Plant(:user)
 
 
-Example of tests :
+<b>Example of tests :</b>
 
 
 def test___1
@@ -40,7 +40,7 @@ def test___2
 end
 
 
-*You can also create a particular plant of user like that:
+<b>You can also create a particular plant of user like that:</b>
 
 user = Plant(:user, :name => "Marie", :age => age)
 
