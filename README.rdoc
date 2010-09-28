@@ -104,7 +104,7 @@ Not tested with rails 3
 
 == Notes
 
-For refactoring tests with plants, require 'plant' in files tests step by step, cause plant stubs AR#find.
+For refactoring tests which used database before(with factory_girl or other) with plants, require 'plant' in files tests step by step, cause plant stubs AR#find.
 When all are refactored you can then place require 'plant' in either test_helper, environment.rb or test in environements/test.rb.
 
 <b>Report Bugs here , on github</b>
