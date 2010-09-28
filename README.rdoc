@@ -4,7 +4,7 @@ Factory_boy can be used as factory_girl except that factories are not created in
 ActiveRecord::Base find method is stubbed to return fixtures (plants) you have instanciate.
 Differenciate find :all, :first, :last, but doesn't do the work of find with sql conditions.
 Anyway we don't think it's important for unit test, if some find calls with sql conditions, :include ... etc have to be
-tested, report it in inetgration tests.
+tested, report it in integration tests is a better idea.
 
 See some examples below.
 You can see also unit tests / code  for deeper comprehension.
