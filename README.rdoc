@@ -26,72 +26,72 @@ Get it with : user = Plant(:user)
 <b>Example of tests :</b>
 
 
-def test___1
-  user = Plant(:user)
-  assert_equal user, User.find #OK
-  assert_equal user, User.find(:first) #OK
-  assert_equal user, User.find(:last) #OK
-end
+  def test___1
+    user = Plant(:user)
+    assert_equal user, User.find #OK
+    assert_equal user, User.find(:first) #OK
+    assert_equal user, User.find(:last) #OK
+  end
 
 
-def test___2
-  2.times { Plant(:user) }
-  assert_equal 2, User.find(:all).size #OK
-end
+  def test___2
+    2.times { Plant(:user) }
+    assert_equal 2, User.find(:all).size #OK
+  end
 
 
 <b>You can also create a particular plant of user like that:</b>
 
-user = Plant(:user, :name => "Marie", :age => age)
+  user = Plant(:user, :name => "Marie", :age => age)
 
 == Specification of  the class of the fixture definition 
 
-Plant.define :admin, :class => User do |user|
-  user.name  = "Bart"
-  user.age = 800
-end
+  Plant.define :admin, :class => User do |user|
+    user.name  = "Bart"
+    user.age = 800
+  end
 
 == Associations 
 
-Very easy to assign fixtures to association in définition of plant :
+Assign fixtures to association in definition of plant :
 
-Plant.define :profile do |profile|
-  profile.password = "BREIZH!"
-end
+  Plant.define :profile do |profile|
+    profile.password = "BREIZH!"
+  end
 
-Plant.define :adress do |adress|
-  adress.number = 12
-  adress.street = "rue de Brest"
-end
+  Plant.define :adress do |adress|
+    adress.number = 12
+    adress.street = "rue de Brest"
+  end
 
-Plant.define :user do |user|
-  user.name  = "Bart"
-  user.age = 800
-  user.profile = Plant(:profile)
-  user.adresses = [Plant(:adress, :street => "Rue de Quimper")]
-end
+  Plant.define :user do |user|
+    user.name  = "Bart"
+    user.age = 800
+    user.profile = Plant(:profile)
+    user.adresses = [Plant(:adress, :street => "Rue de Quimper")]
+  end
 
 
 == Definitions with dependent attributes
 
 If you want to use the value of another attribute in definition, do like that :
 
-Plant.define :user do |user|
-   user.name = "Marie"
-   user.adresses = [Adress.new(:street => "Rue de #{user.name}")]
-end
+  Plant.define :user do |user|
+    user.name = "Marie"
+    user.adresses = [Adress.new(:street => "Rue de #{user.name}")]
+  end
 
 
 == Sequences
 
 As with factory_girl you are able to use sequences, like that :
 
-Plant.sequence :email do |n|
-  "incognito#{n}@kantena.com"
-end
+  Plant.sequence :email do |n|
+    "incognito#{n}@kantena.com"
+  end
 
-Plant.next(:email) # => "incognito1@kantena.com"
-Plant.next(:email) # => "incognito2@kantena.com"
+  Plant.next(:email) # => "incognito1@kantena.com"
+  Plant.next(:email) # => "incognito2@kantena.com"
 
 
 == Dependencies 
@@ -100,7 +100,9 @@ No dependency.
 Not tested with rails 3
 
 
-== New features ?
+== Notes
 
-Stubs find with sql conditions ? That means transform :conditions in object.select ... We think of it !
-Report Bugs here , on github
+For refactoring tests with plants, require 'plant' in files tests step by step, cause plant stubs AR#find.
+When all are refactored you can then place require 'plant' in either test_helper, environment.rb or test in environements/test.rb.
+
+<b>Report Bugs here , on github</b>
