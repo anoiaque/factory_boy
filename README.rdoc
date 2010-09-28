@@ -15,14 +15,10 @@ Define your Plants (=~ Factories if factory_girl) in test/plants.rb
 
 Example :
 
-<pre>
-<code>
-Plant.define :user do |user|
-  user.name  = "Bart"
-  user.age = 800
-end
-</code>
-</pre>
+  Plant.define :user do |user|
+   user.name="Bart"
+   user.age=800
+  end
 
 Get it with : user = Plant(:user)
 
