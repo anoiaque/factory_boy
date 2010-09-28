@@ -46,7 +46,7 @@ Get it with :
 
   user = Plant(:user, :name => "Marie", :age => age)
 
-== Specification of  the class of the fixture definition 
+== Specification of  the class of the fixure definition 
 
   Plant.define :admin, :class => User do |user|
     user.name  = "Bart"
