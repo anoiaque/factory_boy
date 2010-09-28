@@ -20,7 +20,9 @@ Example :
    user.age=800
   end
 
-Get it with : user = Plant(:user)
+Get it with : 
+
+  user = Plant(:user)
 
 
 <b>Example of tests :</b>
