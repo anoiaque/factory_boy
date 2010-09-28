@@ -1,5 +1,5 @@
 begin
-  require 'mocha' #must put there even if mocha is not used ... else mocha override these aliasings it when it's required in test file.
+require 'mocha' #must put there even if mocha is not used ... else mocha override these aliasings it when it's required in test file.
 rescue LoadError
 end
 
