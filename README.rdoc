@@ -46,7 +46,7 @@ Get it with :
 
   user = Plant(:user, :name => "Marie", :age => age)
 
-== Specification of  the class of the fixure definition 
+== Specification of  the class of the fixture definition 
 
   Plant.define :admin, :class => User do |user|
     user.name  = "Bart"
@@ -55,7 +55,7 @@ Get it with :
 
 == Associations 
 
-Assign fixures to association in definition of plant :
+Assign fixtures to association in definition of plant :
 
   Plant.define :profile do |profile|
     profile.password = "BREIZH!"
@@ -104,7 +104,6 @@ Not tested with rails 3
 
 == Notes
 
-For refactoring tests with plants, require 'plant' in files tests step by step, cause plant stubs AR#find.
-When all are refactored you can then place require 'plant' in either test_helper, environment.rb or test in environements/test.rb.
+
 
 <b>Report Bugs here , on github</b>
