@@ -3,6 +3,7 @@ require 'help_test'
 class PlantTest < Test::Unit::TestCase
 
     def setup
+      assert_find_is_unstubbed_for_each_class
       Plant(:customer)
     end
     
@@ -84,7 +85,7 @@ class PlantTest < Test::Unit::TestCase
     end
     
     def test_plants_are_reloaded_and_4_plants_are_defined
-      assert_equal 5, Plant.plants.size
+      assert_equal 4, Plant.plants.size
     end
     
     def test_define_with_dependent_attribute
@@ -98,6 +99,12 @@ class PlantTest < Test::Unit::TestCase
     def test_plant_sequences
       assert_equal "incognito1@kantena.com", Plant.next(:email)
       assert_equal "incognito2@kantena.com", Plant.next(:email)
+    end
+    
+    private
+    
+    def assert_find_is_unstubbed_for_each_class
+      [Adress, Customer, Profile, User].each {|klass| assert_equal "original_find", klass.find }
     end
     
 end

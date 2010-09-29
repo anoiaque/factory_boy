@@ -3,6 +3,8 @@ module Plant
 
     def self.stubs_find klass
       class << klass
+        alias_method :original_find, :find
+        
         def find *args
           case args.first
             when :first then Plant::Stubber.find_all(self.name.constantize).first
@@ -14,6 +16,13 @@ module Plant
       end
     end
 
+    def self.unstubs_find_for klass
+      class << klass
+        undef_method :find
+        alias_method :find, :original_find
+      end
+    end
+    
     def self.find_all klass
       Plant.all[klass] || []
     end

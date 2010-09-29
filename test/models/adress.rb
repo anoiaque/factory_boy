@@ -5,4 +5,8 @@ class Adress
     @street = args[:street]
     @number = args[:number]
   end
+  
+  def self.find *args
+    "original_find"
+  end
 end

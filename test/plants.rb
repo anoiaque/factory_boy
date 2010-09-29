@@ -14,8 +14,8 @@ end
 Plant.define :user do |user|
   user.name  = "Zorro"
   user.age = 800
-  user.profile = Plant(:profile)
-  user.adresses = [Plant(:adress)]
+  user.profile = Plant.association(:profile)
+  user.adresses = [Plant.association(:adress)]
 end
 
 Plant.define :customer do |customer|

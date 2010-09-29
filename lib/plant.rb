@@ -9,6 +9,7 @@ module Plant
   @@pool = {}
   @@map = {}
   @@sequences = {}
+  @@stubbed = []
   
   def self.define symbol, args={}
     klass = args[:class] || symbol.to_s.camelize.constantize
@@ -16,7 +17,19 @@ module Plant
     yield instance if block_given?
     add_plant(klass, instance)
     add_plant(symbol, instance) if args[:class]
-    Plant::Stubber.stubs_find(klass)
+    stubs(instance.class)
+  end
+  
+  def self.stubs klass
+    unless @@stubbed.include?(klass)
+      Plant::Stubber.stubs_find(klass)
+      @@stubbed << klass
+    end
+  end
+  
+  def self.unstub_find_for_each_class
+    @@stubbed.each {|klass| Plant::Stubber.unstubs_find_for(klass)}
+    @@stubbed = []
   end
   
   def self.all
@@ -32,16 +45,23 @@ module Plant
   end
   
   def self.reload 
-    load "#{RAILS_ROOT}/test/plants.rb" 
+    load "#{RAILS_ROOT}/test/plants.rb" if Plant.plants.empty?
   end
   
-  def self.pool klass, instance
-    @@pool[klass] ||= []  
-    @@pool[klass] << instance
+  def self.pool symbol
+    instance = plants[symbol] || plants[symbol.to_s.camelize.constantize]
+    yield instance if block_given?
+    @@pool[instance.class] ||= []  
+    @@pool[instance.class] << instance
+    instance
   end
   
   def self.destroy
     @@pool = {}
+    @@plants = {}
+    @@map = {}
+    @@sequences = {}
+    @@stubbed = []
   end
   
   def self.sequence symbol, &proc
@@ -51,15 +71,18 @@ module Plant
   def self.next symbol
     @@sequences[symbol][:lambda].call(@@sequences[symbol][:index] += 1)
   end
-
+  
+  def self.association symbol
+    Plant.pool(symbol)
+  end
+ 
 end
 
 def Plant symbol, args={}
-  plants = Plant.plants
-  instance = plants[symbol] || plants[symbol.to_s.camelize.constantize]
-  args.each {|key, value| instance.send(key.to_s + '=', value)}
-  Plant.pool(instance.class, instance)
-  instance
+  Plant.reload 
+  Plant.pool(symbol) do |instance|
+    args.each {|key, value| instance.send(key.to_s + '=', value)}
+  end
 end
 
 
