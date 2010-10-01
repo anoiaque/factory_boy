@@ -9,6 +9,12 @@ tested, report it in integration tests is a better idea.
 See some examples below.
 You can see also unit tests / code  for deeper comprehension.
 
+== Install
+
+  gem install factory_boy
+
+Note: You can require 'factory_boy' in just some tests files
+
 == Basic Usage
 
 Define your Plants (=~ Factories if factory_girl) in test/plants.rb
