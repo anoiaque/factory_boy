@@ -13,7 +13,6 @@ You can see also unit tests / code  for deeper comprehension.
 
   gem install factory_boy
 
-Note: You can require 'factory_boy' in just some tests files
 
 == Basic Usage
 
