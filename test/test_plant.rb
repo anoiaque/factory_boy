@@ -106,6 +106,7 @@ class PlantTest < Test::Unit::TestCase
       user_2 = Plant(:user, :name => "Vincent")
 
       assert_equal "Elise", user_1.name
+      assert_equal "Vincent", user_2.name
     end
     
     private

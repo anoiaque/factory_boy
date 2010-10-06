@@ -6,4 +6,5 @@ require 'models/adress'
 require 'models/user'
 require 'models/profile'
 require 'models/customer'
+
 require 'mocha'
