@@ -111,6 +111,7 @@ Not tested with rails 3
 == Change Log
 
 FIX : Push new object in pool of a class doesn't override objects in pool. Safe push.
+FIX : Use #clone instead of #dup. Not same behavior with and without rails(may be overriden by active support)
 
 == Notes
 
