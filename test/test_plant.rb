@@ -101,6 +101,13 @@ class PlantTest < Test::Unit::TestCase
       assert_equal "incognito2@kantena.com", Plant.next(:email)
     end
     
+    def test_creation_of_two_plants_of_same_class_should_keep_each_object_safe
+      user_1 = Plant(:user, :name => "Elise")
+      user_2 = Plant(:user, :name => "Vincent")
+
+      assert_equal "Elise", user_1.name
+    end
+    
     private
     
     def assert_find_is_unstubbed_for_each_class
