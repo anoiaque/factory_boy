@@ -108,6 +108,10 @@ No dependency.
 Not tested with rails 3
 
 
+== Change Log
+
+FIX : Push new object in pool of a class doesn't override objects in pool. Safe push.
+
 == Notes
 
 
