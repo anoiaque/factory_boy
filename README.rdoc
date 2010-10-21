@@ -105,15 +105,14 @@ As with factory_girl you are able to use sequences, like that :
 == Dependencies 
 
 No dependency.
-Not tested with rails 3
-
+Doesn't work, for now, with Active Support 3.0 (In development)
 == In Development 
 
 - Stubs only find of Plant class so we can use both AR find on klasses that are not 'planted'
 - Plant(:xx).clear
 - Provide an id to each Plant
 - When assign instance to an association(ie profile of user), set foreign_key id (ie profile_id of user) 
-
+- To work with Rails 3 (Active Support 3)
 == Change Log
 
 FIX : Push new object in pool of a class doesn't override objects in pool. Safe push.
