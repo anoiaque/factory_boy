@@ -50,10 +50,11 @@ module Plant
   
   def self.pool symbol
     instance = plants[symbol] || plants[symbol.to_s.camelize.constantize]
-    yield instance if block_given?
+    object = instance.clone
+    yield  object if block_given?
     @@pool[instance.class] ||= []  
-    @@pool[instance.class] << instance
-    instance
+    @@pool[instance.class] << object
+    object
   end
   
   def self.destroy

@@ -9,6 +9,11 @@ tested, report it in integration tests is a better idea.
 See some examples below.
 You can see also unit tests / code  for deeper comprehension.
 
+== Install
+
+  gem install factory_boy
+
+
 == Basic Usage
 
 Define your Plants (=~ Factories if factory_girl) in test/plants.rb
@@ -102,6 +107,17 @@ As with factory_girl you are able to use sequences, like that :
 No dependency.
 Not tested with rails 3
 
+== In Development 
+
+- Stubs only find of Plant class so we can use both AR find on klasses that are not 'planted'
+- Plant(:xx).clear
+- Provide an id to each Plant
+- When assign instance to an association(ie profile of user), set foreign_key id (ie profile_id of user) 
+
+== Change Log
+
+FIX : Push new object in pool of a class doesn't override objects in pool. Safe push.
+FIX : Use #clone instead of #dup. Not same behavior with and without rails(may be overriden by active support)
 
 == Notes
 

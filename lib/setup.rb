@@ -3,30 +3,30 @@ begin
 rescue LoadError
 end
 
-module Test
-  module Unit
-    class TestCase
-      alias_method :original_run, :run
-
-      def run(result,&block)
-        Plant.destroy
-        original_run(result,&block)
-        Plant.unstub_find_for_each_class
-      end
-    end
+module Plant
+ module Run
+  def run(result,&block)
+    Plant.destroy
+    original_run(result,&block)
+    Plant.unstub_find_for_each_class
   end
+ end  
 end
 
 if defined?(ActiveSupport::TestCase)
   module ActiveSupport
-    class TestCase
-      alias_method :original_run, :run
-    
-      def run(result,&block)
-        Plant.destroy
-        original_run(result,&block)
-        Plant.unstub_find_for_each_class
+    class TestCase < ::Test::Unit::TestCase
+        alias_method :original_run, :run
+        include Plant::Run
+    end
+  end
+else
+  module Test
+    module Unit
+      class TestCase
+        alias_method :original_run, :run
+        include Plant::Run
       end
     end
   end
-end
+end  
