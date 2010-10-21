@@ -119,7 +119,7 @@ Doesn't work, for now, with Active Support 3.0 (In development)
 
 FIX : Push new object in pool of a class doesn't override objects in pool. Safe push.
 FIX : Use #clone instead of #dup. Not same behavior with and without rails(may be overriden by active support)
-
+FIX : Bug with override TestCase#run under ActiveSupport::TestCase
 == Notes
 
 
