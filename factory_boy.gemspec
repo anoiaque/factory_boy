@@ -1,6 +1,6 @@
 specifications = Gem::Specification.new do |spec| 
   spec.name = "factory_boy"
-  spec.version = "1.0.4"
+  spec.version = "1.0.5"
   spec.author = "Philippe Cantin"
   spec.homepage = "http://github.com/anoiaque/factory_boy"
   spec.platform = Gem::Platform::RUBY
