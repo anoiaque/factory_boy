@@ -113,7 +113,9 @@ Doesn't work, for now, with Active Support 3.0 (In development)
 - Plant(:xx).clear
 - Provide an id to each Plant
 - When assign instance to an association(ie profile of user), set foreign_key id (ie profile_id of user) 
+
 - To work with Rails 3 (Active Support 3)
+- Stub find with conditions using Arel( for Rails 3)
 
 == Change Log
 
