@@ -1,6 +1,5 @@
-require 'rubygems'
-require 'active_support/inflector'
 require 'stubber'
+require 'selector'
 require 'setup'
 
 module Plant
@@ -10,6 +9,9 @@ module Plant
   @@map = {}
   @@sequences = {}
   @@stubbed = []
+  @@stubbed_where = false
+  
+  @@wheres = nil
   
   def self.define symbol, args={}
     klass = args[:class] || symbol.to_s.camelize.constantize
@@ -21,10 +23,19 @@ module Plant
   end
   
   def self.stubs klass
+    if (!@@stubbed_where) then Plant::Stubber.stubs_where and  @@stubbed_where = true end
     unless @@stubbed.include?(klass)
       Plant::Stubber.stubs_find(klass)
       @@stubbed << klass
     end
+  end
+  
+  def self.wheres= wheres
+    @@wheres = wheres
+  end
+  
+  def self.wheres
+    @@wheres
   end
   
   def self.unstub_find_for_each_class
@@ -75,6 +86,19 @@ module Plant
   
   def self.association symbol
     Plant.pool(symbol)
+  end
+  
+  def self.find_all klass
+    Plant.all[klass] || []
+  end
+
+  def self.find klass
+    return nil unless Plant.all[klass]
+    Plant.all[klass].size == 1 ?  Plant.all[klass].first : Plant.all[klass]
+  end
+  
+  def self.select klass
+    Plant::Selector.new(:klass => klass, :wheres => @@wheres, :plants => @@pool[klass].to_a).select
   end
  
 end

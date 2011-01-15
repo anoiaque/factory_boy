@@ -20,13 +20,4 @@ if defined?(ActiveSupport::TestCase)
         include Plant::Run
     end
   end
-else
-  module Test
-    module Unit
-      class TestCase
-        alias_method :original_run, :run
-        include Plant::Run
-      end
-    end
-  end
 end  

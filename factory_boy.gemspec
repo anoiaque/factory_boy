@@ -9,6 +9,6 @@ specifications = Gem::Specification.new do |spec|
   spec.files = Dir['lib/**/*.rb']
   spec.require_path = "lib"
   spec.test_files  = Dir['test/**/*.rb']
-  spec.has_rdoc = false
+  spec.has_rdoc = true
   spec.extra_rdoc_files = ["README.rdoc"]
 end
