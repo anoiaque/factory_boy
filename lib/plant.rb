@@ -22,15 +22,15 @@ module Plant
   end
   
   def self.stubs
-    if !@@stubs[:where] 
+    unless @@stubs[:where] 
       Plant::Stubber.stubs_where
       @@stubs[:where] = true 
     end
-    if !@@stubs[:includes]
+    unless @@stubs[:includes]
       Plant::Stubber.stubs_includes
       @@stubs[:includes] = true 
     end
-    if !@@stubs[:find]
+    unless@@stubs[:find]
       Plant::Stubber.stubs_find 
       @@stubs[:find] = true 
     end
