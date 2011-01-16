@@ -21,4 +21,16 @@ class TestBasicQueries < ActiveSupport::TestCase
     assert_equal users, User.all
   end
   
+  def test_should_find_by_id
+    user = Plant(:user)
+    
+    assert_equal user, User.find(user.id)
+  end
+  
+  def test_should_find_by_ids
+    user_1, user_2 = [Plant(:user), Plant(:user)]
+    
+    assert_equal [user_1, user_2], User.find(user_1.id, user_2.id)
+  end
+  
 end

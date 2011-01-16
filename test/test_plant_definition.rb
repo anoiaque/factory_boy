@@ -2,6 +2,10 @@ require 'help_test'
 
 class TestPlantDefinition < ActiveSupport::TestCase
   
+  def setup
+    assert_plants_are_destroyed_before_each_test
+  end
+  
   def test_simple_definition_of_plant
     assert customer = Plant(:customer)
     assert_nil customer.name
@@ -66,6 +70,15 @@ class TestPlantDefinition < ActiveSupport::TestCase
 
     assert_equal "Elise", user_1.name
     assert_equal "Vincent", user_2.name
+  end
+  
+  private
+  
+  def assert_plants_are_destroyed_before_each_test
+    assert_equal({}, Plant.plants)
+    assert_equal({}, Plant.all)
+    assert_equal({}, Plant.send(:class_variable_get, :@@sequences))
+    assert_equal 0, Plant.send(:class_variable_get, :@@id_counter)
   end
   
 end

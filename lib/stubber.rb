@@ -22,11 +22,12 @@ module Plant
         end
         
         def find *args
+          klass = self.name.constantize
           case args.first
-            when :first then Plant.find_all(self.name.constantize).first
-            when :last  then Plant.find_all(self.name.constantize).last
-            when :all   then Plant.find_all(self.name.constantize)
-            else Plant.find_all(self.name.constantize).first
+            when :first then Plant.find_all(klass).first
+            when :last  then Plant.find_all(klass).last
+            when :all   then Plant.find_all(klass)
+            else Plant.find_by_ids(klass, args)
           end
         end
         
@@ -44,10 +45,13 @@ module Plant
         
         undef_method :find_by_sql
         alias_method :find_by_sql, :original_find_by_sql
+        
         undef_method :first
         alias_method :first, :orginal_first
+        
         undef_method :last
         alias_method :last, :orginal_last
+        
         undef_method :all
         alias_method :all, :orginal_all
       end

@@ -8,7 +8,7 @@ module Plant
   @@pool = {}
   @@map = {}
   @@sequences = {}
-
+  @@id_counter = 0
   @@stubs = {:find => false, :where => false, :includes => false}
   @@wheres = nil
   
@@ -70,6 +70,7 @@ module Plant
   def self.pool symbol
     instance = plants[symbol] || plants[symbol.to_s.camelize.constantize]
     object = instance.clone
+    object.id = (@@id_counter += 1)
     yield  object if block_given?
     @@pool[instance.class] ||= []  
     @@pool[instance.class] << object
@@ -81,6 +82,7 @@ module Plant
     @@plants = {}
     @@map = {}
     @@sequences = {}
+    @@id_counter = 0
   end
   
   def self.sequence symbol, &proc
@@ -97,6 +99,12 @@ module Plant
   
   def self.find_all klass
     Plant.all[klass] || []
+  end
+  
+  def self.find_by_ids klass, ids
+    plants = Plant.all[klass].select{|plant| ids.include?(plant.id)}
+    return plants.first if plants.size == 1
+    plants
   end
   
   def self.select klass

@@ -5,7 +5,6 @@ class StubbingTest < ActiveSupport::TestCase
   
   def setup
     assert_stubs_are_unstubbed_before_each_test
-    assert_plants_are_destroyed_before_each_test
     User.destroy_all
     Profile.destroy_all
   end
@@ -40,13 +39,5 @@ class StubbingTest < ActiveSupport::TestCase
     assert_equal user, User.first
     assert_equal [user], User.where(:name => 'Largo')
   end
-  
-  def assert_plants_are_destroyed_before_each_test
-    assert_equal({}, Plant.plants)
-    assert_equal({}, Plant.all)
-    assert_equal({}, Plant.send(:class_variable_get, :@@sequences))
-  end
-  
- 
   
 end
