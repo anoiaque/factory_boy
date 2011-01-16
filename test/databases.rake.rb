@@ -380,7 +380,7 @@ namespace :db do
 
   namespace :test do
     # desc "Recreate the test database from the current schema.rb"
-    task :load => 'db:test:purge' do
+    task :load do
       ActiveRecord::Base.establish_connection(ActiveRecord::Base.configurations['test'])
       ActiveRecord::Schema.verbose = false
       Rake::Task["db:schema:load"].invoke

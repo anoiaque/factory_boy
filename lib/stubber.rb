@@ -41,8 +41,28 @@ module Plant
       class << ActiveRecord::Base
         undef_method :find
         alias_method :find, :original_find
+        
+        undef_method :find_by_sql
+        alias_method :find_by_sql, :original_find_by_sql
+        undef_method :first
+        alias_method :first, :orginal_first
+        undef_method :last
+        alias_method :last, :orginal_last
+        undef_method :all
+        alias_method :all, :orginal_all
       end
     end
+    
+    def self.unstubs_where
+      ActiveRecord::QueryMethods.send(:undef_method, :where)
+      ActiveRecord::QueryMethods.send(:alias_method, :where, :original_where)
+    end
+    
+    def self.unstubs_includes
+      ActiveRecord::QueryMethods.send(:undef_method, :includes)
+      ActiveRecord::QueryMethods.send(:alias_method, :includes, :original_includes)
+    end
+    
     
     def self.stubs_where
       ActiveRecord::QueryMethods.send(:alias_method, :original_where, :where)

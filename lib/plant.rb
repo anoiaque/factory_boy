@@ -22,13 +22,25 @@ module Plant
   end
   
   def self.stubs
-    Plant::Stubber.stubs_where and  @@stubs[:where] = true if (!@@stubs[:where]) 
-    Plant::Stubber.stubs_includes and  @@stubs[:includes] = true if (!@@stubs[:includes]) 
-    Plant::Stubber.stubs_find and  @@stubs[:find] = true if (!@@stubs[:find])
+    if !@@stubs[:where] 
+      Plant::Stubber.stubs_where
+      @@stubs[:where] = true 
+    end
+    if !@@stubs[:includes]
+      Plant::Stubber.stubs_includes
+      @@stubs[:includes] = true 
+    end
+    if !@@stubs[:find]
+      Plant::Stubber.stubs_find 
+      @@stubs[:find] = true 
+    end
   end
   
   def self.unstubs
-  #@@stubs = {:find => false, :where => false, :includes => false}
+    Plant::Stubber.unstubs_find if @@stubs[:find]
+    Plant::Stubber.unstubs_includes if @@stubs[:includes]
+    Plant::Stubber.unstubs_where if @@stubs[:where]
+    @@stubs = {:find => false, :where => false, :includes => false}
   end
   
   def self.wheres= wheres
