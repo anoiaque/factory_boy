@@ -45,7 +45,6 @@ module Plant
     end
     
     def self.stubs_where
-      
       ActiveRecord::QueryMethods.send(:alias_method, :original_where, :where)
       ActiveRecord::QueryMethods.send(:define_method, :where) do |opts, *rest|
         result = original_where(opts, rest)
@@ -63,6 +62,17 @@ module Plant
       end
     end
     
+    def self.stubs_associations_collections
+      ActiveRecord::Associations::AssociationCollection.send(:alias_method, :original_method_missing, :method_missing)
+      ActiveRecord::Associations::AssociationCollection.send(:define_method, :method_missing) do |method, *args, &block|
+        eval("@target.#{method}")
+      end      
+    end
+    
+    def self.unstubs_associations_collections
+      ActiveRecord::Associations::AssociationCollection.send(:undef_method, :method_missing)
+      ActiveRecord::Associations::AssociationCollection.send(:alias_method, :method_missing, :original_method_missing)
+    end
 
   end
 end

@@ -1,7 +1,7 @@
-# Plant.sequence :email do |n|
-#   "incognito#{n}@kantena.com"
-# end
-# 
+Plant.sequence :email do |n|
+  "incognito#{n}@kantena.com"
+end
+
 Plant.define :profile do |profile|
   profile.password = "BREIZH!"
 end
