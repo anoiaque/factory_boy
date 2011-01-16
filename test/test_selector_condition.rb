@@ -1,5 +1,4 @@
 require 'help_test'
-require 'plant'
 
 class TestSelectorCondition  < ActiveSupport::TestCase
   

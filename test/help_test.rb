@@ -10,6 +10,8 @@ require 'app/models/user'
 require 'app/models/profile'
 require 'app/models/customer'
 
+require 'plant'
+
 require 'mocha'
 
 ActiveRecord::Base.establish_connection(

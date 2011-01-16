@@ -8,9 +8,8 @@ module Plant
   @@pool = {}
   @@map = {}
   @@sequences = {}
-  @@stubbed = []
-  @@stubbed_where = false
-  
+
+  @@stubs = {:find => false, :where => false, :includes => false}
   @@wheres = nil
   
   def self.define symbol, args={}
@@ -19,15 +18,17 @@ module Plant
     yield instance if block_given?
     add_plant(klass, instance)
     add_plant(symbol, instance) if args[:class]
-    stubs(instance.class)
+    stubs
   end
   
-  def self.stubs klass
-    if (!@@stubbed_where) then Plant::Stubber.stubs_where and  @@stubbed_where = true end
-    unless @@stubbed.include?(klass)
-      Plant::Stubber.stubs_find(klass)
-      @@stubbed << klass
-    end
+  def self.stubs
+    Plant::Stubber.stubs_where and  @@stubs[:where] = true if (!@@stubs[:where]) 
+    Plant::Stubber.stubs_includes and  @@stubs[:includes] = true if (!@@stubs[:includes]) 
+    Plant::Stubber.stubs_find and  @@stubs[:find] = true if (!@@stubs[:find])
+  end
+  
+  def self.unstubs
+  #@@stubs = {:find => false, :where => false, :includes => false}
   end
   
   def self.wheres= wheres
@@ -36,11 +37,6 @@ module Plant
   
   def self.wheres
     @@wheres
-  end
-  
-  def self.unstub_find_for_each_class
-    @@stubbed.each {|klass| Plant::Stubber.unstubs_find_for(klass)}
-    @@stubbed = []
   end
   
   def self.all
@@ -73,7 +69,6 @@ module Plant
     @@plants = {}
     @@map = {}
     @@sequences = {}
-    @@stubbed = []
   end
   
   def self.sequence symbol, &proc
@@ -90,11 +85,6 @@ module Plant
   
   def self.find_all klass
     Plant.all[klass] || []
-  end
-
-  def self.find klass
-    return nil unless Plant.all[klass]
-    Plant.all[klass].size == 1 ?  Plant.all[klass].first : Plant.all[klass]
   end
   
   def self.select klass

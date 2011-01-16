@@ -1,8 +1,8 @@
 module Plant
   module Stubber
 
-    def self.stubs_find klass
-      class << klass
+    def self.stubs_find
+      class << ActiveRecord::Base
         alias_method :original_find, :find
         alias_method :original_find_by_sql, :find_by_sql
         alias_method :orginal_first, :first
@@ -26,7 +26,7 @@ module Plant
             when :first then Plant.find_all(self.name.constantize).first
             when :last  then Plant.find_all(self.name.constantize).last
             when :all   then Plant.find_all(self.name.constantize)
-            else Plant.find(self.name.constantize)
+            else Plant.find_all(self.name.constantize).first
           end
         end
         
@@ -37,10 +37,10 @@ module Plant
       end
     end
 
-    def self.unstubs_find_for klass
-      class << klass
-        # undef_method :find
-        #  alias_method :find, :original_find
+    def self.unstubs_find
+      class << ActiveRecord::Base
+        undef_method :find
+        alias_method :find, :original_find
       end
     end
     
@@ -51,8 +51,6 @@ module Plant
         Plant.wheres = result.where_clauses
         result
       end
-      
-      self.stubs_includes #TODO :move
     end
     
     def self.stubs_includes
@@ -73,6 +71,6 @@ module Plant
       ActiveRecord::Associations::AssociationCollection.send(:undef_method, :method_missing)
       ActiveRecord::Associations::AssociationCollection.send(:alias_method, :method_missing, :original_method_missing)
     end
-
+    
   end
 end

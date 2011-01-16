@@ -1,4 +1,5 @@
 module Plant
+  
   class Selector
     
     class Condition
@@ -22,12 +23,12 @@ module Plant
     
     class ArrayCollection
       
-      def initialize array
-        @array = array
+      def initialize collection
+        @collection = collection
       end
       
       def compare operator, operand
-        collection = @array.dup
+        collection = @collection.dup
         collection.map{|object| object.send(@method)}.any? {|object| object.send(operator, operand) }
       end
  
@@ -57,6 +58,19 @@ module Plant
       end
     end
     
+    class Association
+      
+      def initialize(association)
+        @association = association
+      end
+      
+      def method_missing method, *args, &block
+        return nil unless @association
+        @association.send(method)
+      end
+      
+    end
+    
     def initialize  opt={}
       @wheres = opt[:wheres]
       @plants = opt[:plants]
@@ -75,14 +89,14 @@ module Plant
     
     def method_missing method, *args, &block
       case
-      when has_one_association?(method) then eval("object.#{method.to_s[0..-2]}", @binding)
+      when has_one_association?(method) then Association.new(eval("object.#{method.to_s[0..-2]}", @binding))
       when has_many_association?(method) then ArrayCollection.new(eval("object.#{method}", @binding))
       else eval("object.#{method}", @binding)
       end
     end
     
     def has_one_association? method
-      @klass.new.respond_to?(method.to_s[0..-2]) #method - 's'
+      @klass.new.respond_to?(method.to_s[0..-2])
     end
     
     def has_many_association? method
