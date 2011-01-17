@@ -5,8 +5,8 @@ class TestQueriesOnModelAttributes < ActiveSupport::TestCase
   attr_accessor :joe, :bob
   
   def setup
-    @joe = Plant(:user, :name => 'Joe', :age => 30)
-    @bob = Plant(:user, :name => 'Bob', :age => 31)
+    @joe = Plant(:user, :name => 'Joe', :age => 30, :male => true)
+    @bob = Plant(:user, :name => 'Bob', :age => 31, :male => true)
   end
   
   def test_stubbed_find_should_return_empty_array_if_none_object_matches_conditions
@@ -35,6 +35,13 @@ class TestQueriesOnModelAttributes < ActiveSupport::TestCase
     assert_equal [joe], User.where(:age => 30).where(:name => 'Joe')
     users = User.where(:age => 30)
     assert_equal([joe], users.where(:name => 'Joe'))
+  end
+  
+  def test_queries_with_boolean_conditions
+    assert_equal [joe, bob], User.where(:male => true)
+    assert_equal [], User.where(:male => false)
+    assert_equal [joe, bob], User.where("users.male = '1'")
+    assert_equal [joe, bob], User.where("male = '1'")
   end
   
 end

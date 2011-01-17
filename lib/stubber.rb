@@ -57,16 +57,14 @@ module Plant
       end
     end
     
-    def self.unstubs_where
-      ActiveRecord::QueryMethods.send(:undef_method, :where)
-      ActiveRecord::QueryMethods.send(:alias_method, :where, :original_where)
+    def self.stubs_array
+      Array.send(:alias_method, :original_method_missing, :method_missing)
+      Array.send(:define_method, :method_missing) do |method, *args, &block|
+        case method
+        when :order : Plant.order(self, *args)
+        end
+      end
     end
-    
-    def self.unstubs_includes
-      ActiveRecord::QueryMethods.send(:undef_method, :includes)
-      ActiveRecord::QueryMethods.send(:alias_method, :includes, :original_includes)
-    end
-    
     
     def self.stubs_where
       ActiveRecord::QueryMethods.send(:alias_method, :original_where, :where)
@@ -94,6 +92,33 @@ module Plant
     def self.unstubs_associations_collections
       ActiveRecord::Associations::AssociationCollection.send(:undef_method, :method_missing)
       ActiveRecord::Associations::AssociationCollection.send(:alias_method, :method_missing, :original_method_missing)
+    end
+    
+    def self.stubs_attribute_methods
+      ActiveRecord::AttributeMethods.send(:alias_method, :original_method_missing, :method_missing)
+      ActiveRecord::AttributeMethods.send(:define_method, :method_missing) do |method, *args, &block|
+        
+      end      
+    end
+    
+    def self.unstubs_attribute_methods
+      ActiveRecord::AttributeMethods.send(:undef_method, :method_missing)
+      ActiveRecord::AttributeMethods.send(:alias_method, :method_missing, :original_method_missing)
+    end
+    
+    def self.unstubs_where
+      ActiveRecord::QueryMethods.send(:undef_method, :where)
+      ActiveRecord::QueryMethods.send(:alias_method, :where, :original_where)
+    end
+    
+    def self.unstubs_includes
+      ActiveRecord::QueryMethods.send(:undef_method, :includes)
+      ActiveRecord::QueryMethods.send(:alias_method, :includes, :original_includes)
+    end
+    
+    def self.unstubs_array
+      Array.send(:undef_method, :method_missing)
+      Array.send(:alias_method, :method_missing, :original_method_missing)
     end
     
   end

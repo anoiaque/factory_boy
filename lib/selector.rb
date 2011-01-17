@@ -12,7 +12,6 @@ module Plant
       def to_ruby
         @wheres.inject("") do |sql, where|
           copy = where.clone
-          copy.gsub!("#{@klass.name.downcase}s", "object")
           copy.gsub!(/\s=\s/, " == ")
           copy.gsub!('"','')
           
@@ -71,6 +70,53 @@ module Plant
       
     end
     
+    class Attribute
+      
+      def initialize reference, method=nil
+        @reference = reference
+        @method = method
+      end
+      
+      def compare operator, operand
+        value = @reference.send(@method)
+        operand = type_cast(operand, value)
+        value.send(operator, operand)
+      end
+      
+      def type_cast operand, value
+        case value
+         when TrueClass, FalseClass : (operand == 't' || operand == '1')
+         else operand
+        end
+      end
+ 
+      def == operand
+        compare(:==, operand)
+      end
+      
+      def > operand
+        compare(:>, operand)
+      end  
+      
+      def < operand
+        compare(:<, operand)
+      end
+      
+      def >= operand
+        compare(:>=, operand)
+      end
+      
+      def <= operand
+        compare(:<=, operand)
+      end
+      
+      def method_missing method, *args, &block
+        @method = method
+        self
+      end
+      
+    end
+    
     def initialize  opt={}
       @wheres = opt[:wheres]
       @plants = opt[:plants]
@@ -80,8 +126,11 @@ module Plant
     def select
       condition = Condition.new(@wheres, @klass)
       Plant::Stubber.stubs_associations_collections
+      Plant::Stubber.stubs_attribute_methods
       objects = @plants.select {|object| @binding = binding(); eval("#{condition.to_ruby}")}
       Plant::Stubber.unstubs_associations_collections
+      Plant::Stubber.unstubs_attribute_methods
+      
       objects
     end
 
@@ -91,8 +140,13 @@ module Plant
       case
       when has_one_association?(method) then Association.new(eval("object.#{method.to_s[0..-2]}", @binding))
       when has_many_association?(method) then ArrayCollection.new(eval("object.#{method}", @binding))
-      else eval("object.#{method}", @binding)
+      when self_reference?(method) then Attribute.new(eval("object", @binding))
+      else Attribute.new(eval("object", @binding), method)
       end
+    end
+    
+    def self_reference? method
+      @klass.name.downcase == method.to_s[0..-2]
     end
     
     def has_one_association? method
