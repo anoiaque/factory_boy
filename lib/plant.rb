@@ -1,6 +1,7 @@
 require 'stubber'
 require 'selector'
 require 'setup'
+require 'query'
 
 module Plant
 
@@ -9,8 +10,7 @@ module Plant
   @@map = {}
   @@sequences = {}
   @@id_counter = 0
-  @@stubs = {:find => false, :where => false, :includes => false}
-  @@wheres = nil
+
   
   def self.define symbol, args={}
     klass = args[:class] || symbol.to_s.camelize.constantize
@@ -18,37 +18,7 @@ module Plant
     yield instance if block_given?
     add_plant(klass, instance)
     add_plant(symbol, instance) if args[:class]
-    stubs
-  end
-  
-  def self.stubs
-    unless @@stubs[:where] 
-      Plant::Stubber.stubs_where
-      @@stubs[:where] = true 
-    end
-    unless @@stubs[:includes]
-      Plant::Stubber.stubs_includes
-      @@stubs[:includes] = true 
-    end
-    unless@@stubs[:find]
-      Plant::Stubber.stubs_find 
-      @@stubs[:find] = true 
-    end
-  end
-  
-  def self.unstubs
-    Plant::Stubber.unstubs_find if @@stubs[:find]
-    Plant::Stubber.unstubs_includes if @@stubs[:includes]
-    Plant::Stubber.unstubs_where if @@stubs[:where]
-    @@stubs = {:find => false, :where => false, :includes => false}
-  end
-  
-  def self.wheres= wheres
-    @@wheres = wheres
-  end
-  
-  def self.wheres
-    @@wheres
+    Plant::Stubber.stubs
   end
   
   def self.all
@@ -95,20 +65,6 @@ module Plant
   
   def self.association symbol
     Plant.pool(symbol)
-  end
-  
-  def self.find_all klass
-    Plant.all[klass] || []
-  end
-  
-  def self.find_by_ids klass, ids
-    plants = Plant.all[klass].select{|plant| ids.include?(plant.id)}
-    return plants.first if plants.size == 1
-    plants
-  end
-  
-  def self.select klass
-    Plant::Selector.new(:klass => klass, :wheres => @@wheres, :plants => @@pool[klass].to_a).select
   end
  
 end

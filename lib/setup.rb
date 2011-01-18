@@ -8,7 +8,7 @@ module Plant
   def run(result,&block)
     Plant.destroy
     original_run(result,&block)
-    Plant.unstubs
+    Plant::Stubber.unstubs
   end
  end  
 end

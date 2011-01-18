@@ -1,83 +1,90 @@
 module Plant
   module Stubber
-
-    def self.stubs_find
-      class << ActiveRecord::Base
-        alias_method :original_find, :find
-        alias_method :original_find_by_sql, :find_by_sql
-        alias_method :orginal_first, :first
-        alias_method :orginal_all, :all
-        alias_method :orginal_last, :last
-        
-        def first
-          Plant.find_all(self.name.constantize).first
-        end
-        
-        def all
-          Plant.find_all(self.name.constantize)
-        end
-        
-        def last
-          Plant.find_all(self.name.constantize).last
-        end
-        
-        def find *args
-          klass = self.name.constantize
-          case args.first
-            when :first then Plant.find_all(klass).first
-            when :last  then Plant.find_all(klass).last
-            when :all   then Plant.find_all(klass)
-            else Plant.find_by_ids(klass, args)
-          end
-        end
-        
-        def find_by_sql sql
-          Plant.select(self)
-        end
-  
-      end
+    @@stubbed = false
+    
+    def self.stubs
+      return if @@stubbed
+      stubs_find
+      stubs_array
+      stubs_where
+      stubs_order
+      stubs_includes
+      stubs_limit
+      @@stubbed = true
     end
-
-    def self.unstubs_find
-      class << ActiveRecord::Base
-        undef_method :find
-        alias_method :find, :original_find
-        
-        undef_method :find_by_sql
-        alias_method :find_by_sql, :original_find_by_sql
-        
-        undef_method :first
-        alias_method :first, :orginal_first
-        
-        undef_method :last
-        alias_method :last, :orginal_last
-        
-        undef_method :all
-        alias_method :all, :orginal_all
+    
+    def self.unstubs
+      return unless @@stubbed
+      unstubs_where
+      unstubs_order
+      unstubs_limit
+      unstubs_includes
+      unstubs_array
+      unstubs_find
+      @@stubbed = false
+    end
+  
+    def self.stubs_find
+      active_record_base_eigenclass = class << ActiveRecord::Base; self end
+      
+      redefine(active_record_base_eigenclass, :find) do |*args|
+        klass = self.name.constantize
+        case args.first
+          when :first then Plant::Query.find_all(klass).first
+          when :last  then Plant::Query.find_all(klass).last
+          when :all   then Plant::Query.find_all(klass)
+          else Plant::Query.find_by_ids(klass, args)
+        end
       end
+      
+      redefine(active_record_base_eigenclass, :find_by_sql) do |*args|
+        Plant::Query.select(self)
+      end 
+
+      redefine(active_record_base_eigenclass, :first) do |*args|
+        Plant::Query.find_all(self.name.constantize).first
+      end 
+      
+      redefine(active_record_base_eigenclass, :all) do |*args|
+        Plant::Query.find_all(self.name.constantize)
+      end 
+      
+      redefine(active_record_base_eigenclass, :last) do |*args|
+        Plant::Query.find_all(self.name.constantize).last
+      end 
     end
     
     def self.stubs_array
-      Array.send(:alias_method, :original_method_missing, :method_missing)
-      Array.send(:define_method, :method_missing) do |method, *args, &block|
+      redefine(Array, :method_missing) do |method, *args, &block|
         case method
-        when :order : Plant.order(self, *args)
+        when :order : Plant::Query.order(self, *args)
+        when :limit : Plant::Query.limit(self, *args)  
         end
       end
     end
     
     def self.stubs_where
-      ActiveRecord::QueryMethods.send(:alias_method, :original_where, :where)
-      ActiveRecord::QueryMethods.send(:define_method, :where) do |opts, *rest|
+      redefine(ActiveRecord::QueryMethods, :where) do |opts, *rest|
         result = original_where(opts, rest)
-        Plant.wheres = result.where_clauses
+        Plant::Query.wheres = result.where_clauses
         result
       end
     end
     
+    def self.stubs_order
+      redefine(ActiveRecord::QueryMethods, :order) do |*args|
+        self.all.order(*args)
+      end
+    end
+    
+    def self.stubs_limit
+      redefine(ActiveRecord::QueryMethods, :limit) do |*args|
+        self.all.limit(*args)
+      end
+    end
+    
     def self.stubs_includes
-      ActiveRecord::QueryMethods.send(:alias_method, :original_includes, :includes)
-      ActiveRecord::QueryMethods.send(:define_method, :includes) do |*args|
+      redefine(ActiveRecord::QueryMethods, :includes) do |*args|
         self
       end
     end
@@ -89,36 +96,65 @@ module Plant
       end      
     end
     
-    def self.unstubs_associations_collections
-      ActiveRecord::Associations::AssociationCollection.send(:undef_method, :method_missing)
-      ActiveRecord::Associations::AssociationCollection.send(:alias_method, :method_missing, :original_method_missing)
+    def self.stubs_attribute_methods
+      redefine(ActiveRecord::AttributeMethods, :method_missing)
     end
     
-    def self.stubs_attribute_methods
-      ActiveRecord::AttributeMethods.send(:alias_method, :original_method_missing, :method_missing)
-      ActiveRecord::AttributeMethods.send(:define_method, :method_missing) do |method, *args, &block|
-        
-      end      
+    
+    def self.unstubs_associations_collections
+      undefine(ActiveRecord::Associations::AssociationCollection, :method_missing)
     end
     
     def self.unstubs_attribute_methods
-      ActiveRecord::AttributeMethods.send(:undef_method, :method_missing)
-      ActiveRecord::AttributeMethods.send(:alias_method, :method_missing, :original_method_missing)
+      undefine(ActiveRecord::AttributeMethods, :method_missing)
     end
     
     def self.unstubs_where
-      ActiveRecord::QueryMethods.send(:undef_method, :where)
-      ActiveRecord::QueryMethods.send(:alias_method, :where, :original_where)
+      undefine(ActiveRecord::QueryMethods, :where)
+    end
+    
+    def self.unstubs_order
+      undefine(ActiveRecord::QueryMethods, :order)
+    end
+    
+    def self.unstubs_limit
+      undefine(ActiveRecord::QueryMethods, :limit)
     end
     
     def self.unstubs_includes
-      ActiveRecord::QueryMethods.send(:undef_method, :includes)
-      ActiveRecord::QueryMethods.send(:alias_method, :includes, :original_includes)
+      undefine(ActiveRecord::QueryMethods, :includes)
     end
     
     def self.unstubs_array
-      Array.send(:undef_method, :method_missing)
-      Array.send(:alias_method, :method_missing, :original_method_missing)
+      undefine(Array, :method_missing)
+    end
+    
+    def self.unstubs_find
+      active_record_base_eigenclass = class << ActiveRecord::Base; self end
+      
+      undefine(active_record_base_eigenclass, :find)
+      undefine(active_record_base_eigenclass, :find_by_sql)
+      undefine(active_record_base_eigenclass, :first)
+      undefine(active_record_base_eigenclass, :last)
+      undefine(active_record_base_eigenclass, :all)
+    end
+    
+    private
+    
+    def self.redefine klass, method, &block
+      klass.send(:alias_method, original_method(method), method)
+      klass.send(:define_method, method) do |*params|
+        instance_exec(*params, &block)
+      end
+    end
+    
+    def self.undefine klass, method
+      klass.send(:undef_method, method)
+      klass.send(:alias_method, method, original_method(method))
+    end
+    
+    def self.original_method method
+      ('original_' + method.to_s).to_sym
     end
     
   end
