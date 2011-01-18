@@ -1,10 +1,11 @@
 module Plant
   module Stubber
+    
     @@stubbed = false
     
     def self.stubs
       return if @@stubbed
-      stubs_find
+      stubs_finds
       stubs_array
       stubs_where
       stubs_order
@@ -20,11 +21,11 @@ module Plant
       unstubs_limit
       unstubs_includes
       unstubs_array
-      unstubs_find
+      unstubs_finds
       @@stubbed = false
     end
   
-    def self.stubs_find
+    def self.stubs_finds
       active_record_base_eigenclass = class << ActiveRecord::Base; self end
       
       redefine(active_record_base_eigenclass, :find) do |*args|
@@ -52,6 +53,7 @@ module Plant
       redefine(active_record_base_eigenclass, :last) do |*args|
         Plant::Query.find_all(self.name.constantize).last
       end 
+      
     end
     
     def self.stubs_array
@@ -100,7 +102,6 @@ module Plant
       redefine(ActiveRecord::AttributeMethods, :method_missing)
     end
     
-    
     def self.unstubs_associations_collections
       undefine(ActiveRecord::Associations::AssociationCollection, :method_missing)
     end
@@ -129,7 +130,7 @@ module Plant
       undefine(Array, :method_missing)
     end
     
-    def self.unstubs_find
+    def self.unstubs_finds
       active_record_base_eigenclass = class << ActiveRecord::Base; self end
       
       undefine(active_record_base_eigenclass, :find)
