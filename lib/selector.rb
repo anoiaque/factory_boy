@@ -133,7 +133,7 @@ module Plant
  
     def select
       condition = Condition.new(@wheres, @klass)
-      p condition.to_ruby
+
       Plant::Stubber.stubs_associations_collections
       Plant::Stubber.stubs_attribute_methods
       objects = @plants.select {|object| @binding = binding(); eval("#{condition.to_ruby}")}

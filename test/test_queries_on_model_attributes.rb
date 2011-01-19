@@ -45,4 +45,6 @@ class TestQueriesOnModelAttributes < ActiveSupport::TestCase
     assert_equal [joe, bob], User.where("male = '1'")
   end
   
+
+  
 end

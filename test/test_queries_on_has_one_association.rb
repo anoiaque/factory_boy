@@ -34,4 +34,12 @@ class TestQueriesOnHasOneAssociation < ActiveSupport::TestCase
     assert_equal [joe], User.where("profiles.checked = '0'")
   end
   
+  def test_queries_with_float_and_decimal
+    profile = Plant(:profile, :height => 1.75, :salary => 2000.23)
+    joe = Plant(:user, :name => 'Joe', :profile => profile)
+    
+    assert_equal [joe], User.where('profiles.height = 1.75')
+    assert_equal [joe], User.where('profiles.salary = 2000.23')
+  end
+  
 end

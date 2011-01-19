@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(:version => 20101230223549) do
     t.integer "user_id"
     t.string  "password"
     t.boolean "checked"
+    t.decimal "height"
+    t.float   "salary"
   end
 
   create_table "users", :force => true do |t|

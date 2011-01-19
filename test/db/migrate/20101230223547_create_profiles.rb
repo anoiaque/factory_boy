@@ -4,6 +4,8 @@ class CreateProfiles < ActiveRecord::Migration
       t.references :user
       t.string :password
       t.boolean :checked
+      t.decimal :height
+      t.float :salary
     end
   end
 
