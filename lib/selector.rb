@@ -14,7 +14,7 @@ module Plant
           copy = where.clone
           copy.gsub!(/\s=\s/, " == ")
           copy.gsub!('"','')
-          
+          copy.gsub!(/\slike\s/i,'.match ')
           sql << (sql.blank? ? "" : " and ") + copy
         end
       end
@@ -66,6 +66,7 @@ module Plant
       def method_missing method, *args, &block
         return nil unless @association
         @association.send(method)
+        Attribute.new(@association, method)
       end
       
     end
@@ -108,6 +109,12 @@ module Plant
       
       def <= operand
         compare(:<=, operand)
+      end
+      
+      def match operand
+        operand.gsub!(/\%/,'(.*)')
+        operand = '^' + operand + '$' 
+        @reference.send(@method).match(operand)
       end
       
       def method_missing method, *args, &block

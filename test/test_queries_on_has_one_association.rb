@@ -17,4 +17,21 @@ class TestQueriesOnHasOneAssociation < ActiveSupport::TestCase
     assert_equal [], User.where(:name => 'Joe').where("profiles.password = 'azerty'")
   end
   
+  def test_should_stubs_find_with_where_conditions_on_has_one_association_with_inequality_operators
+    profile = Plant(:profile, :password => 'a')
+    joe = Plant(:user, :name => 'Joe', :profile => profile)
+   
+    assert_equal [joe], User.where(:name => 'Joe').where("profiles.password >= 'a'")
+    assert_equal [], User.where(:name => 'Joe').where("profiles.password > 'a'")
+    assert_equal [], User.where(:name => 'Joe').where("profiles.password < 'a'")
+    assert_equal [], User.where(:name => 'Joe').where("profiles.password != 'a'")
+  end
+  
+  def test_should_stubs_find_with_where_conditions_on_has_one_association_with_boolean_condition
+    profile = Plant(:profile, :checked => false)
+    joe = Plant(:user, :name => 'Joe', :profile => profile)
+   
+    assert_equal [joe], User.where("profiles.checked = '0'")
+  end
+  
 end

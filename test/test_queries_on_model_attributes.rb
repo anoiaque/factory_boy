@@ -25,6 +25,7 @@ class TestQueriesOnModelAttributes < ActiveSupport::TestCase
     assert_equal [joe, bob], User.where("(age = 30 and name = 'Joe') or (age = 31 and name = 'Bob')")
     assert_equal [joe, bob], User.where("age <= 31")
     assert_equal [], User.where("age > 31")
+    assert_equal [joe], User.where("name = ?", 'Joe')
   end
   
   def test_queries_with_dynamics_finders_methods

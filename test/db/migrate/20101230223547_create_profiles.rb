@@ -3,6 +3,7 @@ class CreateProfiles < ActiveRecord::Migration
     create_table :profiles do |t|
       t.references :user
       t.string :password
+      t.boolean :checked
     end
   end
 

@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20101230223549) do
   create_table "profiles", :force => true do |t|
     t.integer "user_id"
     t.string  "password"
+    t.boolean "checked"
   end
 
   create_table "users", :force => true do |t|
