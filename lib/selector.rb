@@ -14,7 +14,8 @@ module Plant
           copy = where.clone
           copy.gsub!(/\s=\s/, " == ")
           copy.gsub!('"','')
-          copy.gsub!(/\slike\s/i,'.match ')
+          copy.match(/(\slike\s*)'/i)
+          copy.gsub!($1,'.match ') if $1
           sql << (sql.blank? ? "" : " and ") + copy
         end
       end
@@ -132,6 +133,7 @@ module Plant
  
     def select
       condition = Condition.new(@wheres, @klass)
+      p condition.to_ruby
       Plant::Stubber.stubs_associations_collections
       Plant::Stubber.stubs_attribute_methods
       objects = @plants.select {|object| @binding = binding(); eval("#{condition.to_ruby}")}
