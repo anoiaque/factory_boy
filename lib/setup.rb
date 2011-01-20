@@ -4,20 +4,20 @@
 # end
 
 module Plant
- module Run
-  def run(result,&block)
-    Plant.destroy
-    original_run(result,&block)
-    Plant::Stubber.unstubs
+  module Run
+    def run(result,&block)
+      Plant.destroy
+      original_run(result,&block)
+      Plant::Stubber.unstubs
+    end
   end
- end  
 end
 
 if defined?(ActiveSupport::TestCase)
   module ActiveSupport
     class TestCase < ::Test::Unit::TestCase
-        alias_method :original_run, :run
-        include Plant::Run
+      alias_method :original_run, :run
+      include Plant::Run
     end
   end
-end  
+end

@@ -32,7 +32,7 @@ class TestQueriesOnModelAttributes < ActiveSupport::TestCase
     assert_equal joe, User.find_by_name('Joe')
   end
   
-  def test_should_handle_chainded_where_clauses
+  def test_should_handle_chained_where_clauses
     assert_equal [joe], User.where(:age => 30).where(:name => 'Joe')
     users = User.where(:age => 30)
     assert_equal([joe], users.where(:name => 'Joe'))

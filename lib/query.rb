@@ -1,8 +1,8 @@
 module Plant
   module Query
-    
+
     @@wheres = nil
-    
+
     def self.wheres= wheres
       @@wheres = wheres
     end
@@ -10,7 +10,7 @@ module Plant
     def self.wheres
       @@wheres
     end
-    
+
     def self.find_all klass
       Plant.all[klass] || []
     end
@@ -33,6 +33,6 @@ module Plant
     def self.limit objects, args
       objects.first(args)
     end
-    
+
   end
 end
