@@ -45,6 +45,15 @@ class TestQueriesOnModelAttributes < ActiveSupport::TestCase
     assert_equal [joe, bob], User.where("male = '1'")
   end
   
+  def test_queries_with_sql_is_null_and_is_not_null
+    joe.name = nil
+    
+    assert_equal [joe], User.where(:name => nil)
+    assert_equal [joe], User.where('name is null')
+
+    assert_equal [bob], User.where('name is not null')
+  end
+  
 
   
 end

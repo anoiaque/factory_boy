@@ -14,8 +14,25 @@ module Plant
           copy = where.clone
           copy.gsub!(/\s=\s/, " == ")
           copy.gsub!('"','')
-          copy.match(/(\slike\s*)'/i)
+          
+          copy.match(/(\sLIKE\s*)'/i)
           copy.gsub!($1,'.match ') if $1
+          
+          copy.match(/(\sIN\s*)\(/i)
+          copy.gsub!($1,'.included_in?') if $1
+
+          copy.match(/(\sBETWEEN\s*)((\d*)\sAND\s(\d*))/i)
+          between, range = $1, ($3.to_i .. $4.to_i)
+          copy.gsub!($2, '') if $2
+          copy.gsub!(between, ".included_in?(#{range}) ") if between
+          
+          copy.match(/(\sIS\sNULL)/i)
+          copy.gsub!($1,'== nil') if $1
+          
+          copy.match(/(\sIS\sNOT\sNULL)/i)
+          copy.gsub!($1,'!= nil') if $1
+          
+
           sql << (sql.blank? ? "" : " and ") + copy
         end
       end
@@ -117,6 +134,12 @@ module Plant
         operand = '^' + operand + '$'
         @reference.send(@method).match(operand)
       end
+      
+      def included_in? *operand
+        range = operand.first if operand.first.is_a?(Range)
+        return range.include?(@reference.send(@method)) if range
+        operand.include?(@reference.send(@method))
+      end
 
       def method_missing method, *args, &block
         @method = method
@@ -133,7 +156,9 @@ module Plant
 
     def select
       condition = Condition.new(@wheres, @klass)
-
+  
+      p condition.to_ruby
+  
       Plant::Stubber.stubs_associations_collections
       Plant::Stubber.stubs_attribute_methods
       objects = @plants.select {|object| @binding = binding(); eval("#{condition.to_ruby}")}
