@@ -1,3 +1,5 @@
+require 'blank_slate'
+  
 module Plant
 
   class Selector
@@ -38,7 +40,7 @@ module Plant
       end
     end
 
-    class ArrayCollection
+    class ArrayCollection < BlankSlate
 
       def initialize collection
         @collection = collection
@@ -46,30 +48,13 @@ module Plant
 
       def compare operator, operand
         collection = @collection.dup
-        collection.map{|object| object.send(@method)}.any? {|object| object.send(operator, operand) }
-      end
-
-      def == operand
-        compare(:==, operand)
-      end
-
-      def > operand
-        compare(:>, operand)
-      end
-
-      def < operand
-        compare(:<, operand)
-      end
-
-      def >= operand
-        compare(:>=, operand)
-      end
-
-      def <= operand
-        compare(:<=, operand)
+        collection.map{|object| Attribute.new(object, @method)}.any? {|object| object.send(operator, operand) }
       end
 
       def method_missing method, *args, &block
+        if (@method)
+          return compare(method, *args)
+        end
         @method = method
         self
       end
@@ -83,7 +68,6 @@ module Plant
 
       def method_missing method, *args, &block
         return nil unless @association
-        @association.send(method)
         Attribute.new(@association, method)
       end
 
@@ -156,8 +140,6 @@ module Plant
 
     def select
       condition = Condition.new(@wheres, @klass)
-  
-      p condition.to_ruby
   
       Plant::Stubber.stubs_associations_collections
       Plant::Stubber.stubs_attribute_methods
