@@ -16,7 +16,7 @@ class TestQueriesOnHasManyAssociation < ActiveSupport::TestCase
     joe = Plant(:user, :name => 'Joe', :age => 30, :addresses => addresses)
     
     assert_equal([], User.where("addresses.street != '21 Jump Street'").joins(:addresses))
-    assert_equal([joe], User.where("addresses.street != '20 Jump Street'").joins(:addresses))
+    assert_equal([joe], User.where("addresses.street <> '20 Jump Street'").joins(:addresses))
   end
   
   def test_queries_with_conditions_on_has_many_association_with_inequality_operators

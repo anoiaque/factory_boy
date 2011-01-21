@@ -14,7 +14,11 @@ module Plant
       def to_ruby
         @wheres.inject("") do |sql, where|
           copy = where.clone
+          
           copy.gsub!(/\s=\s/, " == ")
+          copy.gsub!('"','')
+          
+          copy.gsub!(/\s<>\s/, " != ")
           copy.gsub!('"','')
           
           copy.match(/(\sLIKE\s*)'/i)
@@ -112,7 +116,7 @@ module Plant
       def <= operand
         compare(:<=, operand)
       end
-
+ 
       def match operand
         operand.gsub!(/\%/,'(.*)')
         operand = '^' + operand + '$'
@@ -140,7 +144,7 @@ module Plant
 
     def select
       condition = Condition.new(@wheres, @klass)
-      
+
       Plant::Stubber.stubs_associations_collections
       Plant::Stubber.stubs_attribute_methods
       objects = @plants.select {|object| @binding = binding(); eval("#{condition.to_ruby}")}
