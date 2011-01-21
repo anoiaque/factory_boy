@@ -140,7 +140,7 @@ module Plant
 
     def select
       condition = Condition.new(@wheres, @klass)
-  
+      
       Plant::Stubber.stubs_associations_collections
       Plant::Stubber.stubs_attribute_methods
       objects = @plants.select {|object| @binding = binding(); eval("#{condition.to_ruby}")}
@@ -170,8 +170,7 @@ module Plant
       end
 
       def has_many_association? method
-        association = @klass.reflect_on_association(method)
-        association && association.macro == :has_many
+        Plant::Reflection.has_many_association?(@klass, method)
       end
 
   end

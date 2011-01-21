@@ -64,6 +64,28 @@ class TestPlantDefinition < ActiveSupport::TestCase
     assert_equal "incognito2@kantena.com", Plant.next(:email)
   end
   
+  def test_should_set_foreign_key_values_for_has_many_associations
+    address_1 = Plant(:address, :street => 'azb')
+    address_2 = Plant(:address, :street => 'azc')
+
+    joe = Plant(:user, :name => 'Joe', :addresses => [address_1])
+    bob = Plant(:user, :name => 'Bob', :addresses => [address_2])
+    
+    assert_equal joe.id, address_1.user_id
+    assert_equal bob.id, address_2.user_id
+  end
+  
+  def test_should_set_foreign_key_values_for_has_one_associations
+    profile_1 = Plant(:profile, :password => 'azerty')
+    profile_2 = Plant(:profile, :password => 'qwerty')
+
+    joe = Plant(:user, :name => 'Joe', :profile => profile_1)
+    bob = Plant(:user, :name => 'Bob', :profile => profile_2)
+
+    assert_equal joe.id, profile_1.user_id
+    assert_equal bob.id, profile_2.user_id
+  end
+  
   def test_creation_of_two_plants_of_same_class_should_keep_each_object_safe
     user_1 = Plant(:user, :name => "Elise")
     user_2 = Plant(:user, :name => "Vincent")
@@ -71,6 +93,29 @@ class TestPlantDefinition < ActiveSupport::TestCase
     assert_equal "Elise", user_1.name
     assert_equal "Vincent", user_2.name
   end
+  
+  def test_creation_of_two_plants_of_same_class_should_keep_has_one_associations_safe
+    profile_1 = Plant(:profile, :password => 'azerty')
+    profile_2 = Plant(:profile, :password => 'qwerty')
+
+    joe = Plant(:user, :name => 'Joe', :profile => profile_1)
+    bob = Plant(:user, :name => 'Bob', :profile => profile_2)
+
+    assert_equal profile_1, joe.profile
+    assert_equal profile_2, bob.profile
+  end
+  
+  def test_creation_of_two_plants_of_same_class_should_keep_has_many_associations_safe
+    address_1 = Plant(:address, :street => 'azb')
+    address_2 = Plant(:address, :street => 'azc')
+
+    joe = Plant(:user, :name => 'Joe', :addresses => [address_1])
+    bob = Plant(:user, :name => 'Bob', :addresses => [address_2])
+    
+    assert_equal [address_1], joe.addresses
+    assert_equal [address_2], bob.addresses
+  end
+  
   
   private
   

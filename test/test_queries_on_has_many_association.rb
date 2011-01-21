@@ -27,6 +27,17 @@ class TestQueriesOnHasManyAssociation < ActiveSupport::TestCase
     assert_equal([], User.where("addresses.street < 'a' ").joins(:addresses))
     assert_equal([joe], User.where("addresses.street <= 'b' ").joins(:addresses))
     assert_equal([joe], User.where("addresses.street >= 'b' ").joins(:addresses))
+    
   end
+
+  def test_queries_with_conditions_on_has_many_association_with_like_predicate
+    joe = Plant(:user, :name => 'Joe', :addresses => [Plant(:address, :street => 'azb')])
+    bob = Plant(:user, :name => 'Bob', :addresses => [Plant(:address, :street => 'azc')])
+   
+    assert_equal([joe, bob], User.where("addresses.street like  ?", 'az%').joins(:addresses))
+    assert_equal([joe], User.where("addresses.street like  ?", 'azb').joins(:addresses))
+    
+  end
+ 
   
 end
