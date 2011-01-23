@@ -32,10 +32,10 @@ class TestPlantDefinition < ActiveSupport::TestCase
     assert_equal address, user.addresses.first
   end
 
-  def test_define_with_class_option
+  def test_definition_with_class_option
     Plant.define :marie, :class => User do |marie|
       marie.name = "Marie"
-      marie.addresses = [Address.new(:street => "Rue de Brest")]
+      marie.addresses = [Plant(:address, :street => "Rue de Brest")]
     end
     
     marie = Plant(:marie)
@@ -52,7 +52,7 @@ class TestPlantDefinition < ActiveSupport::TestCase
   def test_definition_of_a_plant_with_dependent_attribute
     Plant.define :user do |user|
       user.name = "Marie"
-      user.addresses = [Address.new(:street => "Rue de #{user.name}")]
+      user.addresses = [Plant(:address, :street => "Rue de #{user.name}")]
     end
     
     assert_equal "Rue de Marie", Plant(:user).addresses.first.street
@@ -65,53 +65,39 @@ class TestPlantDefinition < ActiveSupport::TestCase
   end
   
   def test_should_set_foreign_key_values_for_has_many_associations
-    address_1 = Plant(:address, :street => 'azb')
-    address_2 = Plant(:address, :street => 'azc')
-
-    joe = Plant(:user, :name => 'Joe', :addresses => [address_1])
-    bob = Plant(:user, :name => 'Bob', :addresses => [address_2])
+    joe, bob = joe_and_bob[:users]
     
-    assert_equal joe.id, address_1.user_id
-    assert_equal bob.id, address_2.user_id
+    assert_equal joe.id, joe.addresses.first.user_id
+    assert_equal bob.id, bob.addresses.first.user_id
   end
   
   def test_should_set_foreign_key_values_for_has_one_associations
-    profile_1 = Plant(:profile, :password => 'azerty')
-    profile_2 = Plant(:profile, :password => 'qwerty')
+    joe, bob = joe_and_bob[:users]
 
-    joe = Plant(:user, :name => 'Joe', :profile => profile_1)
-    bob = Plant(:user, :name => 'Bob', :profile => profile_2)
-
-    assert_equal joe.id, profile_1.user_id
-    assert_equal bob.id, profile_2.user_id
+    assert_equal joe.id, joe.profile.user_id
+    assert_equal bob.id, bob.profile.user_id
   end
   
   def test_creation_of_two_plants_of_same_class_should_keep_each_object_safe
-    user_1 = Plant(:user, :name => "Elise")
-    user_2 = Plant(:user, :name => "Vincent")
+    joe, bob = joe_and_bob[:users]
 
-    assert_equal "Elise", user_1.name
-    assert_equal "Vincent", user_2.name
+    assert_equal "Joe", joe.name
+    assert_equal "Bob", bob.name
   end
   
   def test_creation_of_two_plants_of_same_class_should_keep_has_one_associations_safe
-    profile_1 = Plant(:profile, :password => 'azerty')
-    profile_2 = Plant(:profile, :password => 'qwerty')
-
-    joe = Plant(:user, :name => 'Joe', :profile => profile_1)
-    bob = Plant(:user, :name => 'Bob', :profile => profile_2)
+    users =  joe_and_bob
+    joe, bob, profile_1, profile_2 = users[:users], users[:profiles]
 
     assert_equal profile_1, joe.profile
     assert_equal profile_2, bob.profile
   end
   
   def test_creation_of_two_plants_of_same_class_should_keep_has_many_associations_safe
-    address_1 = Plant(:address, :street => 'azb')
-    address_2 = Plant(:address, :street => 'azc')
-
-    joe = Plant(:user, :name => 'Joe', :addresses => [address_1])
-    bob = Plant(:user, :name => 'Bob', :addresses => [address_2])
-    
+    users =  joe_and_bob
+    joe, bob = users[:users]
+    address_1, address_2 = users[:addresses]
+     
     assert_equal [address_1], joe.addresses
     assert_equal [address_2], bob.addresses
   end
@@ -123,7 +109,21 @@ class TestPlantDefinition < ActiveSupport::TestCase
     assert_equal({}, Plant.plants)
     assert_equal({}, Plant.all)
     assert_equal({}, Plant.send(:class_variable_get, :@@sequences))
-    assert_equal 0, Plant.send(:class_variable_get, :@@id_counter)
+    assert_equal 0, Plant.send(:class_variable_get, :@@id)
+  end
+  
+  def joe_and_bob
+    address_1 = Plant(:address, :street => '40 rue de PenMarch')
+    address_2 = Plant(:address, :street => '25 Bd du Guilvinec')
+
+    profile_1 = Plant(:profile, :password => 'azerty')
+    profile_2 = Plant(:profile, :password => 'qwerty')
+    
+    joe = Plant(:user, :name => 'Joe', :addresses => [address_1], :profile => profile_1)
+    bob = Plant(:user, :name => 'Bob', :addresses => [address_2], :profile => profile_2)
+    
+ 
+    {:users => [joe, bob], :addresses => [address_1, address_2], :profiles => [profile_1, profile_2]}
   end
   
 end
