@@ -1,14 +1,10 @@
 == Overview
 Factory Boy aims to avoid slow unit tests due to usage of create/find fixtures in database, with factory_girl for example.
-
 Factory Boy can be used as factory_girl except that factories are not created in database.
-
 ActiveRecord::Base finders method is stubbed to return fixtures (plants) you have instanciate.
 
 Now, Factory Boy 2 handle stub of Active Record (3+) queries.
-
 This means, the fixtures(plants) created with factory boy are retrieved via a AR queries(and only with AR new queries) of your models.
-
 It does not pretend to stub 100% of all queries, but the coverage can be estimated at about 80%-90% of useful queries.
 
 
