@@ -36,6 +36,11 @@ The better way to see queries handled is to see all unit tests.
 - Queries with explicit sql string(find_by_sql("..."))
 - #order with more than one order clause (ie .order(name asc, age desc))
 - IS and IS NOT with other operand than NULL
+- having - group clauses methods
+- select clause method
+- lock
+- readonly
+- from
 
 == Ids
 
@@ -148,6 +153,8 @@ As with factory_girl you are able to use sequences, like that :
 == In Development 
 
 - Stubs aggregations methods in queries(sum, count ...)
+- having - group clauses methods
+- select clause method
 
 
 == Install

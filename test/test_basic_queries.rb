@@ -33,4 +33,10 @@ class TestBasicQueries < ActiveSupport::TestCase
     assert_equal [user_1, user_2], User.find(user_1.id, user_2.id)
   end
   
+  def test_
+    user = Plant(:user, :name => 'toto')
+    
+    assert_equal user, User.find_by_name('toto')
+  end
+  
 end
