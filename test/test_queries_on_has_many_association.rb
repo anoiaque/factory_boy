@@ -38,6 +38,14 @@ class TestQueriesOnHasManyAssociation < ActiveSupport::TestCase
     assert_equal([joe], User.where("addresses.street like  ?", 'azb').joins(:addresses))
     
   end
+  
+  def test_queries_on_association_proxy
+    address_1, address_2 = [Plant(:address, :street => '21 Jump Street'), Plant(:address, :street => 'Rue des Lilas')]
+    joe = Plant(:user, :name => 'Joe', :addresses => [address_1, address_2])
+ 
+    assert_equal [address_1], joe.addresses.where(:street => '21 Jump Street') 
+    assert_equal [], joe.addresses.where(:street => '210 Jump Street') 
+  end
  
   
 end

@@ -14,10 +14,10 @@ module Plant
 
   def self.define symbol, args={}
     klass = args[:class] || symbol.to_s.camelize.constantize
-    instance = klass.new
-    yield instance if block_given?
-    add_plant(klass, instance)
-    add_plant(symbol, instance) if args[:class]
+    definition = klass.new
+    yield definition if block_given?
+    add_plant(klass, definition)
+    add_plant(symbol, definition) if args[:class]
     Plant::Reflection.reflect(klass)
     Plant::Stubber.stubs
   end
@@ -39,12 +39,11 @@ module Plant
   end
 
   def self.pool symbol
-    instance = plants[symbol] || plants[symbol.to_s.camelize.constantize]
-    object = Plant::Reflection.clone(instance)
-    object.id = (@@id_counter += 1)
+    definition = plants[symbol] || plants[symbol.to_s.camelize.constantize]
+    object = Plant::Reflection.clone(definition, @@id_counter += 1)
     yield  object if block_given?
-    @@pool[instance.class] ||= []
-    @@pool[instance.class] << object
+    @@pool[definition.class] ||= []
+    @@pool[definition.class] << object
     object
   end
 
