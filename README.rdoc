@@ -156,7 +156,7 @@ As with factory_girl you are able to use sequences, like that :
 - Stubs aggregations methods in queries(sum, count ...)
 - having - group clauses methods
 - select clause method
-
+- Case when primary key is not id
 
 == Install
 
