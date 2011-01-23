@@ -8,8 +8,8 @@ This means, the fixtures(plants) created with factory boy are retrieved via a AR
 It does not pretend to stub 100% of all queries, but the coverage can be estimated at about 80%-90% of useful queries.
 
 Active Record is stubbed only when at least one Plant is created in a test.
-After each test everything is unstubbed. That means, if you have a case where a particular(complex) query is executed
-but not right stubbed with factory boy you can test using fixtures in databases(with factory girl or just model.create ..), skipping factory boy process.
+After each test everything is unstubbed.
+That means, if you have a case where a particular(complex) query is executed but not right stubbed with factory boy you can test using fixtures in databases(with factory girl or just model.create ..), skipping factory boy process.
 
 Tested with Active Record 3.0.1
 Tests are suppose to use ActiveSupport::TestCase
