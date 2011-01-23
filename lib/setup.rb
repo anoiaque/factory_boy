@@ -14,6 +14,7 @@ module Plant
 end
 
 if defined?(ActiveSupport::TestCase)
+  require 'active_support/test_case' #fix constant not found Test when ran as gem under rails 3 app 
   module ActiveSupport
     class TestCase < ::Test::Unit::TestCase
       alias_method :original_run, :run
