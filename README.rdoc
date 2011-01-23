@@ -54,6 +54,7 @@ Example :
   Plant.define :user do |user|
    user.name="Bart"
    user.age=800
+   user.addresses = [Plant(:address)]
   end
   
   
@@ -106,9 +107,9 @@ Assign fixtures to association in definition of plant :
     profile.password = "BREIZH!"
   end
 
-  Plant.define :address do |adress|
-    adress.number = 12
-    adress.street = "rue de Brest"
+  Plant.define :address do |address|
+    address.number = 12
+    address.street = "rue de Brest"
   end
 
   Plant.define :user do |user|
