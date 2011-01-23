@@ -11,6 +11,7 @@ module Plant
       stubs_order
       stubs_includes
       stubs_limit
+      stubs_offset
       @@stubbed = true
     end
 
@@ -19,6 +20,7 @@ module Plant
       unstubs_where
       unstubs_order
       unstubs_limit
+      unstubs_offset
       unstubs_includes
       unstubs_array
       unstubs_finds
@@ -61,6 +63,7 @@ module Plant
         case method
         when :order : Plant::Query.order(self, *args)
         when :limit : Plant::Query.limit(self, *args)
+        when :offset : Plant::Query.offset(self, *args)  
         end
       end
     end
@@ -81,7 +84,17 @@ module Plant
 
     def self.stubs_limit
       redefine(ActiveRecord::QueryMethods, :limit) do |*args|
-        self.all.limit(*args)
+        unless self.is_a?Array
+          Plant::Query.find_all(self.name.constantize).limit(*args)
+        else
+          self.all.limit(*args)
+        end
+      end
+    end
+    
+    def self.stubs_offset
+      redefine(ActiveRecord::QueryMethods, :offset) do |*args|
+        self.offset(*args)
       end
     end
 
@@ -120,6 +133,10 @@ module Plant
 
     def self.unstubs_limit
       undefine(ActiveRecord::QueryMethods, :limit)
+    end
+    
+    def self.unstubs_offset
+      undefine(ActiveRecord::QueryMethods, :offset)
     end
 
     def self.unstubs_includes

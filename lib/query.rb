@@ -30,8 +30,14 @@ module Plant
       objects.sort {|x, y| (x,y = y,x if order == 'desc'); x.send(attribute.to_sym) <=> y.send(attribute.to_sym)}
     end
 
-    def self.limit objects, args
-      objects.first(args)
+    def self.limit objects, limit_value
+      @@objects = objects
+      @@limit = limit_value
+      objects.first(limit_value)
+    end
+    
+    def self.offset objects, offset_value
+      @@objects[offset_value..-1].first(@@limit)
     end
 
   end
