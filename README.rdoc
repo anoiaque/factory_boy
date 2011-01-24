@@ -12,8 +12,9 @@ This means, the fixtures(plants) created with factory boy are retrieved via a AR
 It does not pretend to stub 100% of all queries, but the coverage can be estimated at about 80%-90% of useful queries.
 
 
-Active Record is stubbed only when at least one Plant is created in a test.\n
-After each test everything is unstubbed.
+<b>Active Record is stubbed only when at least one Plant is created in a test.</b>
+
+<b>After each test everything is unstubbed.</b>
 That means, if you have a case where a particular(complex) query is executed but not right stubbed with factory boy you can test using fixtures in databases(with factory girl or just model.create ..), skipping factory boy process.
 
 Tested with Active Record 3.0.1
@@ -56,7 +57,7 @@ Each plant fixture has now an (unique) id.
 
 Define your Plants (~ Factories if factory_girl) in test/plants.rb
 
-Example :
+<b>Examples :</b>
 
   Plant.define :address do |address|
     address.number = 12
@@ -66,7 +67,7 @@ Example :
   Plant.define :user do |user|
    user.name="Bart"
    user.age=800
-   user.addresses = [Plant(:address)]
+   user.addresses = <b>[Plant(:address)]</b>
   end
   
   
