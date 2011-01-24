@@ -67,7 +67,7 @@ Define your Plants (~ Factories if factory_girl) in test/plants.rb
   Plant.define :user do |user|
    user.name="Bart"
    user.age=800
-   user.addresses = <b>[Plant(:address)]</b>
+   user.addresses = [Plant(:address)]
   end
   
   
