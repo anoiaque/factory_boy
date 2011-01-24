@@ -1,7 +1,9 @@
 == Overview
 
 *Factory Boy aims to avoid slow unit tests due to usage of create/find fixtures in database, with factory_girl for example.
+
 *Factory Boy can be used as factory_girl except that factories are not created in database.
+
 *ActiveRecord::Base finders are stubbed to return fixtures (plants) you have instanciated.
 
 Now, Factory Boy 2 handle stub of Active Record (3+) queries.
