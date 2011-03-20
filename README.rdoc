@@ -178,6 +178,3 @@ As with factory_girl you are able to use sequences, like that :
 
 If you use it, thanks to report feedbacks here, as issue or by git mail box. <b>Thanks!</b>
 
-== Issues
-
-<b>Report Bugs here , on github</b>
