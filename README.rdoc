@@ -176,5 +176,5 @@ As with factory_girl you are able to use sequences, like that :
 
 == Note
 
-If you use it, thanks to report feedbacks here, as issue or by git mail box. <b>Thanks!</b>
+If you use it, thanks to report feedbacks here, as issue or by git mail box, it will help me to enhance it. <b>Thanks!</b>
 
