@@ -58,7 +58,7 @@ Each plant fixture has now an (unique) id.
 Define your Plants (~ Factories if factory_girl) in test/plants.rb
 
 <b>Examples :</b>
-
+```ruby
   Plant.define :address do |address|
     address.number = 12
     address.street = "rue de Brest"
@@ -69,7 +69,7 @@ Define your Plants (~ Factories if factory_girl) in test/plants.rb
    user.age=800
    user.addresses = [Plant(:address)]
   end
-  
+```  
   
 
 Get it with : 
