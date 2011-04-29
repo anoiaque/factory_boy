@@ -1,6 +1,6 @@
 specifications = Gem::Specification.new do |spec| 
   spec.name = "factory_boy"
-  spec.version = "2.0.1"
+  spec.version = "2.0.2"
   spec.author = "Philippe Cantin"
   spec.homepage = "http://github.com/anoiaque/factory_boy"
   spec.platform = Gem::Platform::RUBY
@@ -15,6 +15,7 @@ specifications = Gem::Specification.new do |spec|
       User.where(:name => 'toto').where('addresses.street = 'here').joins(:addresses) will be stubbed into
       a select ruby on plants and return here, user.
       See more on github and in unit tests.
+      Compatible ruby 1.9.2.
     EOF
   spec.files = Dir['lib/**/*.rb']
   spec.require_path = "lib"
