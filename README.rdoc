@@ -17,7 +17,7 @@ It does not pretend to stub 100% of all queries, but the coverage can be estimat
 <b>After each test everything is unstubbed.</b>
 That means, if you have a case where a particular(complex) query is executed but not right stubbed with factory boy you can test using fixtures in databases(with factory girl or just model.create ..), skipping factory boy process.
 
-Tested with Active Record 3.0.1
+Tested with Active Record > 3.0.1
 Tests are suppose to use ActiveSupport::TestCase
 
 See some examples below.
@@ -172,7 +172,7 @@ As with factory_girl you are able to use sequences, like that :
 
 == Change Log
 * add  require 'active_support/test_case'  To fix constant not found Test (setup.rb) when ran as gem under rails 3 app 
-
+* FIX : When : statements incompatibility with ruby 1.9.2
 == Note
 
 If you use it, thanks to report feedbacks here, as issue or by git mail box, it will help me to enhance it. <b>Thanks!</b>
