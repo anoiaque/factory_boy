@@ -20,7 +20,7 @@ module Plant
           
           copy.gsub!(/\s<>\s/, " != ")
           copy.gsub!('"','')
-          
+            
           copy.match(/(\sLIKE\s*)'/i)
           copy.gsub!($1,'.match ') if $1
           
@@ -92,7 +92,7 @@ module Plant
 
       def type_cast operand, value
         case value
-        when TrueClass, FalseClass : (operand == 't' || operand == '1')
+        when TrueClass, FalseClass then (operand == 't' || operand == '1')
         else operand
         end
       end
@@ -144,10 +144,10 @@ module Plant
 
     def select
       condition = Condition.new(@wheres, @klass)
-
+ 
       Plant::Stubber.stubs_associations_collections
       Plant::Stubber.stubs_attribute_methods
-      objects = @plants.select {|object| @binding = binding(); eval("#{condition.to_ruby}")}
+      objects = @plants.select {|object| @binding = binding();eval("#{condition.to_ruby}")}
       Plant::Stubber.unstubs_associations_collections
       Plant::Stubber.unstubs_attribute_methods
 

@@ -61,9 +61,9 @@ module Plant
     def self.stubs_array
       redefine(Array, :method_missing) do |method, *args, &block|
         case method
-        when :order : Plant::Query.order(self, *args)
-        when :limit : Plant::Query.limit(self, *args)
-        when :offset : Plant::Query.offset(self, *args)  
+        when :order then Plant::Query.order(self, *args)
+        when :limit then Plant::Query.limit(self, *args)
+        when :offset then Plant::Query.offset(self, *args)  
         end
       end
     end

@@ -3,7 +3,7 @@ require 'help_test'
 class TestSelectorCondition  < ActiveSupport::TestCase
   
   def test_should_transform_sql_conditions_to_ruby_select_conditions_with_one_where
-    condition = Plant::Selector::Condition.new("(users.name = 'Joe')", User)
+    condition = Plant::Selector::Condition.new(["(users.name = 'Joe')"], User)
     
     assert_equal "(users.name == 'Joe')", condition.to_ruby
   end

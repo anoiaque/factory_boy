@@ -12,7 +12,7 @@ class TestQueriesOnHasManyAssociation < ActiveSupport::TestCase
   end
   
   def test_queries_with_conditions_on_has_many_association_with_non_equality_operator
-    addresses = [Plant(:address, :street => '21 Jump Street'), Plant(:address, :street => 'Rue des Lilas')]
+    addresses = [Plant(:address, :street => '21 Jump Street')]
     joe = Plant(:user, :name => 'Joe', :age => 30, :addresses => addresses)
     
     assert_equal([], User.where("addresses.street != '21 Jump Street'").joins(:addresses))
