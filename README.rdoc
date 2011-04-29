@@ -1,18 +1,23 @@
 == Overview
+
 Factory Boy aims to avoid slow unit tests due to usage of create/find fixtures in database, with factory_girl for example.
+
 Factory Boy can be used as factory_girl except that factories are not created in database.
-ActiveRecord::Base finders method is stubbed to return fixtures (plants) you have instanciate.
+
+ActiveRecord::Base finders are stubbed to return fixtures (plants) you have instanciated.
 
 Now, Factory Boy 2 handle stub of Active Record (3+) queries.
 This means, the fixtures(plants) created with factory boy are retrieved via a AR queries(and only with AR new queries) of your models.
+
 It does not pretend to stub 100% of all queries, but the coverage can be estimated at about 80%-90% of useful queries.
 
 
-Active Record is stubbed only when at least one Plant is created in a test.
-After each test everything is unstubbed.
+<b>Active Record is stubbed only when at least one Plant is created in a test.</b>
+
+<b>After each test everything is unstubbed.</b>
 That means, if you have a case where a particular(complex) query is executed but not right stubbed with factory boy you can test using fixtures in databases(with factory girl or just model.create ..), skipping factory boy process.
 
-Tested with Active Record 3.0.1
+Tested with Active Record > 3.0.1
 Tests are suppose to use ActiveSupport::TestCase
 
 See some examples below.
@@ -28,6 +33,8 @@ You should see unit tests to inspect tested stubbed queries!
 - order (with only one order clause)
 - ranges (ie where(:age => (20..30)))
 - IS NULL and IS NOT NULL sql predicates
+- dynamic finders (ie find_by_name_and_age(...)
+- scopes
 
 The better way to see queries handled is to see all unit tests.
 
@@ -50,7 +57,7 @@ Each plant fixture has now an (unique) id.
 
 Define your Plants (~ Factories if factory_girl) in test/plants.rb
 
-Example :
+<b>Examples :</b>
 
   Plant.define :address do |address|
     address.number = 12
@@ -62,7 +69,6 @@ Example :
    user.age=800
    user.addresses = [Plant(:address)]
   end
-  
   
 
 Get it with : 
@@ -153,9 +159,11 @@ As with factory_girl you are able to use sequences, like that :
 == In Development 
 
 - Stubs aggregations methods in queries(sum, count ...)
-- having - group clauses methods
-- select clause method
-
+- Having - group clauses methods
+- Select clause method
+- Case when primary key is not id
+- Handle table name modified via table_name method
+- Handle foreign key specified name (ie foreign_key => ) in association declaration
 
 == Install
 
@@ -164,8 +172,8 @@ As with factory_girl you are able to use sequences, like that :
 
 == Change Log
 * add  require 'active_support/test_case'  To fix constant not found Test (setup.rb) when ran as gem under rails 3 app 
+* FIX : When : statements incompatibility with ruby 1.9.2
+== Note
 
+If you use it, thanks to report feedbacks here, as issue or by git mail box, it will help me to enhance it. <b>Thanks!</b>
 
-== Issues
-
-<b>Report Bugs here , on github</b>
