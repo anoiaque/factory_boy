@@ -17,7 +17,8 @@ It does not pretend to stub 100% of all queries, but the coverage can be estimat
 <b>After each test everything is unstubbed.</b>
 That means, if you have a case where a particular(complex) query is executed but not right stubbed with factory boy you can test using fixtures in databases(with factory girl or just model.create ..), skipping factory boy process.
 
-Tested with Active Record > 3.0.1
+This version has been tested with ActiveRecord >= 3.0 and <= 3.1 and ruby 1.8.7 & 1.9.2
+Issues with ruby 1.9.3+
 Tests are suppose to use ActiveSupport::TestCase
 
 See some examples below.
@@ -161,7 +162,7 @@ As with factory_girl you are able to use sequences, like that :
 
 
 == In Development 
-
+- FIX issues with ruby 1.9.3
 - Stubs aggregations methods in queries(sum, count ...)
 - Having - group clauses methods
 - Select clause method
