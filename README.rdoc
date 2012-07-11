@@ -26,6 +26,10 @@ Tests are suppose to use ActiveSupport::TestCase
 See some examples below.
 You should see unit tests to inspect tested stubbed queries!
 
+== Quality Metrics
+
+{<img src="https://codeclimate.com/badge.png" />}[https://codeclimate.com/github/anoiaque/factory_boy]
+
 == Continuous Integration
 
 http://travis-ci.org/anoiaque/factory_boy.png
