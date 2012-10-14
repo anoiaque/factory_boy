@@ -105,8 +105,8 @@ module Plant
     end
 
     def self.stubs_associations_collections
-      ActiveRecord::Associations::AssociationCollection.send(:alias_method, :original_method_missing, :method_missing)
-      ActiveRecord::Associations::AssociationCollection.send(:define_method, :method_missing) do |method, *args, &block|
+      ActiveRecord::Associations::CollectionAssociation.send(:alias_method, :original_method_missing, :method_missing)
+      ActiveRecord::Associations::CollectionAssociation.send(:define_method, :method_missing) do |method, *args, &block|
         eval("@target.#{method}")
       end
     end
@@ -116,7 +116,7 @@ module Plant
     end
 
     def self.unstubs_associations_collections
-      undefine(ActiveRecord::Associations::AssociationCollection, :method_missing)
+      undefine(ActiveRecord::Associations::CollectionAssociation, :method_missing)
     end
 
     def self.unstubs_attribute_methods

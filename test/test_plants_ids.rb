@@ -10,6 +10,7 @@ class TestPlantsIds < ActiveSupport::TestCase
       address = Plant(:address)
       ids += [user.id, profile.id, address.id]
     end
+    assert !ids.include?(nil)
     assert_equal ids, ids.uniq
   end
   

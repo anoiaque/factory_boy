@@ -10,7 +10,7 @@ module Plant
   @@pool = {}
   @@map = {}
   @@sequences = {}
- @@id = 0
+  @@id = 0
 
   def self.define symbol, args={}
     klass = args[:class] || symbol.to_s.camelize.constantize
@@ -40,7 +40,7 @@ module Plant
 
   def self.pool symbol
     definition = plants[symbol] || plants[symbol.to_s.camelize.constantize]
-    object = Plant::Reflection.clone(definition,@@id += 1)
+    object = Plant::Reflection.clone(definition, @@id += 1)
     yield  object if block_given?
     @@pool[definition.class] ||= []
     @@pool[definition.class] << object
@@ -52,7 +52,7 @@ module Plant
     @@plants = {}
     @@map = {}
     @@sequences = {}
-   @@id = 0
+    @@id = 0
   end
 
   def self.sequence symbol, &proc

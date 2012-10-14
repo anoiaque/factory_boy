@@ -16,10 +16,10 @@ module Plant
       cloner = Proc.new {|attribute| clone.send(attribute.to_s + "=", object.send(attribute))}
       reflection = @@reflections[object.class]
       
-      clone.id = id
       reflection[:attributes].keys.each(&cloner)
       [:has_many, :has_one, :belongs_to].each {|relation| reflection[relation].each(&cloner)}
 
+      clone.id = id
       clone
     end
     

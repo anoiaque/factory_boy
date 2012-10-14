@@ -38,7 +38,8 @@ module Plant
           copy.match(/(\sIS\sNOT\sNULL)/i)
           copy.gsub!($1,'!= nil') if $1
           
-
+          copy.gsub!(/\sAND\s/, ' and ')
+          
           sql << (sql.blank? ? "" : " and ") + copy
         end
       end

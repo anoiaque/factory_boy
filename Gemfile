@@ -2,5 +2,5 @@ source :rubygems
 
 gem 'rake'
 gem 'mocha'
-gem 'activerecord', '>= 3.0.1'
+gem 'activerecord'
 gem 'sqlite3'
