@@ -6,9 +6,9 @@ specifications = Gem::Specification.new do |spec|
   spec.platform = Gem::Platform::RUBY
   spec.summary = "Create fixtures for unit testing as in Factory Girl but without database usage."
   spec.description = <<-EOF
-      !!Version 2.0.2 is compatible with ActiveRecord < 3.1      
-      !!Version 2.0.3+ is compatible with ActiveRecord >= 3.1     
-      
+      Version 2.0.2 is compatible with ActiveRecord < 3.1      
+      Version 2.0.3+ is compatible with ActiveRecord >= 3.1     
+      ------
       Factory Girl with database accesses stubbed.
       The versions 2+ only work with Rails 3 (AR 3+) for stubbing queries.
       Now handle Rails 3 (only Rails 3) queries stubbing,
