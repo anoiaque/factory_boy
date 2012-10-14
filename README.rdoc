@@ -1,7 +1,7 @@
 == Overview
 
-<b> Note : Version 2.0.2 is compatible with ActiveRecord < 3.1 <b>
-<b> Note : Version 2.0.3 is compatible with ActiveRecord >= 3.1 <b>
+<b> Note : Version 2.0.2 is compatible with ActiveRecord < 3.1 </b>
+<b> Note : Version 2.0.3 is compatible with ActiveRecord >= 3.1 </b>
 
 Factory Boy aims to avoid slow unit tests due to usage of create/find fixtures in database, with factory_girl for example.
 
